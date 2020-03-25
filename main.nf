@@ -62,11 +62,57 @@ if (params.help) {
   exit 0
 }
 
-if (params.treatment2 && !params.control2) {
-  params.control2 = params.control
+if (!params.treatment) {
+  exit 1, "--treatment was not specified!"
+} else if (!file(params.treatment).exists()) {
+  exit 1, "--treatment was specified but ${params.treatment} does not exist!"
+}
+
+if (!params.control) {
+  log.info "--control was not specified. Proceeding without!"
+  params.control = null
+} else if (!file(params.control).exists()) {
+  exit 1, "--control was specified but ${params.control} does not exist!"
+}
+
+if (!params.genome) {
+  exit 1, "--genome was not specfied!"
+}
+
+if (!params.outputDir) {
+  log.info "--outputDir was not specified. Using default directory ./results"
+  params.outputDir = "results"
+  file(params.outputDir).mkdir()
+} else if (!file(params.outputDir).exists()) {
+  file(params.outputDir).mkdir()
+}
+
+if (!params.filePrefix) {
+  params.filePrefix = "NSpeaks"
+}
+
+if (!params.extensionSize) {
+  log.info "--extensionSize was not specified. Using default of 275"
+  params.extensionSize = 275
+}
+
+if (!params.qValueCutoff) {
+  log.info "--qValueCutoff was not specified. Using default of 0.05"
+  params.qValueCutoff = 0.05
 }
 
 if (params.treatment2) {
+
+  if (!file(params.treatment2).exists()) {
+    exit 1, "--treatment2 was specified but ${params.treatment2} does not exist!"
+  }
+
+  if (!params.control2) {
+    params.control2 = params.control
+  } else if (!file(params.control2).exists()) {
+    exit 1, "--control2 was specified but ${params.control2} does not exist!"
+  }
+
   log.info ""
   log.info " parameters"
   log.info " ======================"
@@ -95,26 +141,19 @@ if (params.treatment2) {
   log.info " outputDir                : ${params.outputDir}"
   log.info " ======================"
   log.info ""
-}
 
+}
 
 inputChannel = Channel
                   .from(params.treatment)
 
-paramChannel = Channel
-                  .from([params.outdir,
-                         params.genome,
-                         params.extensionSize,
-                         params.qValueCutoff])
-
-if (params.control) {}
+if (params.control) {
   process callPeaksWithControl {
 
     tag { name }
 
     input:
-    set val(prefix), file(treatment), file(control) from inputChannel
-    set val(outdir), val(genome), val(extensionSize), val(qValueCutoff) from paramChannel
+    from inputChannel
 
     output:
     into resultCallPeaks
