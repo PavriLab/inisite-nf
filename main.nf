@@ -36,11 +36,19 @@ def helpMessage() {
   nextflow run dmalzl/inisite-nf
 
   Options:
-    --treatment       aligned nascent strand sequencing reads in BAM format
-    --control         aligned reads of control data
+    --treatment       BAM file containing aligned nacsent strand reads
+    --treatment2      BAM file containing aligned nascent strand reads for
+                      an additional experiment
+    --control         BAM files containing aligned control reads
+    --control2        BAM files containing aligned control reads for
+                      an additional experiment. If not given --control
+                      is reused.
+
 
     --extensionSize   size to which the reads should be extended
     --qValueCutoff    MACS2  q-value cutoff
+    --genome          genome size to use by MACS (see MACS documentation
+                      for allowed values)
 
     --filePrefix      prefix to use for output files
     --outputDir       name of the directory to save results to
@@ -54,20 +62,50 @@ if (params.help) {
   exit 0
 }
 
-log.info ""
-log.info " parameters"
-log.info " ======================"
-log.info " treatment                : ${params.treatment}"
-log.info " control                  : ${params.control}"
-log.info " extensionSize            : ${params.extensionSize}"
-log.info " qValueCutoff             : ${params.qValueCutoff}"
-log.info " filePrefix               : ${params.filePrefix}"
-log.info " outputDir                : ${params.outputDir}"
-log.info " ======================"
-log.info ""
+if (params.treatment2 && !params.control2) {
+  params.control2 = params.control
+}
+
+if (params.treatment2) {
+  log.info ""
+  log.info " parameters"
+  log.info " ======================"
+  log.info " treatment                : ${params.treatment}"
+  log.info " treatment2               : ${params.treatment2}"
+  log.info " control                  : ${params.control}"
+  log.info " control2                 : ${params.control2}"
+  log.info " extensionSize            : ${params.extensionSize}"
+  log.info " qValueCutoff             : ${params.qValueCutoff}"
+  log.info " genome                   : ${params.genome}"
+  log.info " filePrefix               : ${params.filePrefix}"
+  log.info " outputDir                : ${params.outputDir}"
+  log.info " ======================"
+  log.info ""
+
+} else {
+  log.info ""
+  log.info " parameters"
+  log.info " ======================"
+  log.info " treatment                : ${params.treatment}"
+  log.info " control                  : ${params.control}"
+  log.info " extensionSize            : ${params.extensionSize}"
+  log.info " qValueCutoff             : ${params.qValueCutoff}"
+  log.info " genome                   : ${params.genome}"
+  log.info " filePrefix               : ${params.filePrefix}"
+  log.info " outputDir                : ${params.outputDir}"
+  log.info " ======================"
+  log.info ""
+}
+
 
 inputChannel = Channel
-                  .fromPath(params.treatment)
+                  .from(params.treatment)
+
+paramChannel = Channel
+                  .from([params.outdir,
+                         params.genome,
+                         params.extensionSize,
+                         params.qValueCutoff])
 
 if (params.control) {}
   process callPeaksWithControl {
@@ -75,6 +113,8 @@ if (params.control) {}
     tag { name }
 
     input:
+    set val(prefix), file(treatment), file(control) from inputChannel
+    set val(outdir), val(genome), val(extensionSize), val(qValueCutoff) from paramChannel
 
     output:
     into resultCallPeaks
@@ -141,5 +181,5 @@ process filterInititiationSites {
   into resultsFilter
 
   shell:
-  
+
 }
