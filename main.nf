@@ -144,8 +144,28 @@ if (params.treatment2) {
 
 }
 
+if (!params.treatment2 && !params.control) {
+  fileList = [[params.treatment]]
+} else if (!params.treatment2 && params.control) {
+  fileList = [[params.treatment, params.control]]
+} else if (params.treatment2 && !params.control) {
+  fileList = [[params.treatment],
+              [params.treatment2]]
+} else {
+  fileList = [[params.treatment, params.control],
+              [params.treatment2, params.control2]]
+}
+
+paramChannel = Channel
+                  .from([[params.extensionSize,
+                          params.qValueCutoff,
+                          params.genome,
+                          params.filePrefix,
+                          params.outputDir]])
+
 inputChannel = Channel
-                  .from(params.treatment)
+                  .from(fileList)
+                  .combine(paramChannel).println()
 
 if (params.control) {
   process callPeaksWithControl {
