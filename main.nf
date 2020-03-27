@@ -204,19 +204,40 @@ if (params.treatment2) {
 
     tag { filePrefix1 }
 
+    publishDir  path: "${params.outputDir}",
+                mode: "copy",
+                saveAs: "true",
+                pattern: "*.common.bed"
+
     input:
     set val(filePrefix1), file(peakFile1), val(filePrefix2), file(peakFile2) from resultCallPeaks.collect
 
     output:
-    set val(filePrefix1), "${filePrefix1}_intersect.bed" into resultsIntersectTreatments
+    set val(filePrefix1), "${filePrefix1}.common.bed" into resultsIntersectTreatments
 
     shell:
     """
+    bedtools intersect -wa -a !{peakFile1} -b !{peakFile2} > AB.intersect.bed
+    bedtools intersect -wa -b !{peakFile1} -a !{peakFile2} > BA.intersect.bed
+    cat *.intersect.bed | sort -k1,1 -k2,2n > !{filePrefix1}.intersect.sort.bed
+    bedtools merge -i !{filePrefix1}.intersect.sort.bed -c 4 -o collapse,count,count_distinct > !{filePrefix1}.common.bed
     """
   }
 
   process clusterInitiationSites {
-    
+
+    tag { filePrefix }
+
+    input:
+    set val(filePrefix), file(commonPeaks) from resultsIntersectTreatments
+
+    output:
+    set val(filePrefix), file(commonPeaks), file(inisiteClusters) into resultsCluster
+
+    shell:
+    """
+    clusterinisites.py -p !{commonPeaks}
+    """
   }
 } else {
   process clusterInitiationSites {
