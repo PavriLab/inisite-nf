@@ -50,7 +50,8 @@ def helpMessage() {
     --genome          genome size to use by MACS (see MACS documentation
                       for allowed values)
 
-    --filePrefix      prefix to use for output files
+    --filePrefix      prefix to use for output files of --treatment
+    --filePrefix2     prefix to use for output files of --treatment2
     --outputDir       name of the directory to save results to
   """.stripIndent()
 }
@@ -79,37 +80,17 @@ if (!params.genome) {
   exit 1, "--genome was not specfied!"
 }
 
-if (!params.outputDir) {
-  log.info "--outputDir was not specified. Using default directory ./results"
-  params.outputDir = "results"
+if (!file(params.outputDir).exists()) {
   file(params.outputDir).mkdir()
-} else if (!file(params.outputDir).exists()) {
-  file(params.outputDir).mkdir()
-}
-
-if (!params.filePrefix) {
-  params.filePrefix = "NSpeaks"
-}
-
-if (!params.extensionSize) {
-  log.info "--extensionSize was not specified. Using default of 275"
-  params.extensionSize = 275
-}
-
-if (!params.qValueCutoff) {
-  log.info "--qValueCutoff was not specified. Using default of 0.05"
-  params.qValueCutoff = 0.05
 }
 
 if (params.treatment2) {
-
   if (!file(params.treatment2).exists()) {
     exit 1, "--treatment2 was specified but ${params.treatment2} does not exist!"
   }
 
-  if (!params.control2) {
-    params.control2 = params.control
-  } else if (!file(params.control2).exists()) {
+  params.control2 = params.control
+  if (!file(params.control2).exists()) {
     exit 1, "--control2 was specified but ${params.control2} does not exist!"
   }
 
@@ -124,6 +105,7 @@ if (params.treatment2) {
   log.info " qValueCutoff             : ${params.qValueCutoff}"
   log.info " genome                   : ${params.genome}"
   log.info " filePrefix               : ${params.filePrefix}"
+  log.info " filePrefix2              : ${params.filePrefix2}"
   log.info " outputDir                : ${params.outputDir}"
   log.info " ======================"
   log.info ""
