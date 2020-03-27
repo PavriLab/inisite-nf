@@ -139,15 +139,15 @@ if (!params.treatment2 && !params.control) {
 }
 
 paramChannel = Channel
-                  .from([[params.extensionSize,
-                          params.qValueCutoff,
-                          params.genome,
-                          params.filePrefix,
-                          params.outputDir]])
+                  .fromList([[params.extensionSize,
+                              params.qValueCutoff,
+                              params.genome,
+                              params.filePrefix,
+                              params.outputDir]])
 
 inputChannel = Channel
-                  .from(fileList)
-                  .combine(paramChannel)
+                  .fromList(fileList)
+                  .combine(paramChannel).println()
 
 if (params.control) {
   process callPeaksWithControl {
@@ -196,5 +196,30 @@ if (params.control) {
     grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
    	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
     """
+  }
+}
+
+if (params.treatment2) {
+  process intersectTreatments {
+
+    tag { filePrefix1 }
+
+    input:
+    set val(filePrefix1), file(peakFile1), val(filePrefix2), file(peakFile2) from resultCallPeaks.collect
+
+    output:
+    set val(filePrefix1), "${filePrefix1}_intersect.bed" into resultsIntersectTreatments
+
+    shell:
+    """
+    """
+  }
+
+  process clusterInitiationSites {
+    
+  }
+} else {
+  process clusterInitiationSites {
+
   }
 }
