@@ -50,8 +50,7 @@ def helpMessage() {
     --genome          genome size to use by MACS (see MACS documentation
                       for allowed values)
 
-    --filePrefix      prefix to use for output files of --treatment
-    --filePrefix2     prefix to use for output files of --treatment2
+    --filePrefix      prefix to use for output files
     --outputDir       name of the directory to save results to
   """.stripIndent()
 }
@@ -105,7 +104,6 @@ if (params.treatment2) {
   log.info " qValueCutoff             : ${params.qValueCutoff}"
   log.info " genome                   : ${params.genome}"
   log.info " filePrefix               : ${params.filePrefix}"
-  log.info " filePrefix2              : ${params.filePrefix2}"
   log.info " outputDir                : ${params.outputDir}"
   log.info " ======================"
   log.info ""
@@ -147,7 +145,7 @@ paramChannel = Channel
 
 inputChannel = Channel
                   .fromList(fileList)
-                  .combine(paramChannel).println()
+                  .combine(paramChannel)
 
 if (params.control) {
   process callPeaksWithControl {
@@ -187,7 +185,7 @@ if (params.control) {
     set file(treatment), val(extensionSize), val(qValueCutoff), val(genome), val(filePrefix), file(outputDir) from inputChannel
 
     output:
-    set val(filePrefix), "${filePrefix}_peaks.narrowPeak" into resultCallPeaks
+    set val(filePrefix), "${filePrefix}_peaks.narrowPeak" into resultsCallPeaks
 
     shell:
     """
@@ -206,7 +204,7 @@ if (params.treatment2) {
 
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
-                saveAs: "true",
+                overwrite: "true",
                 pattern: "*.common.bed"
 
     input:
@@ -228,19 +226,64 @@ if (params.treatment2) {
 
     tag { filePrefix }
 
+    publishDir  path: "${params.outputDir}",
+                mode: "copy",
+                saveAs: { filename -> "${filePrefix}_IZ.bed"}
+
     input:
     set val(filePrefix), file(commonPeaks) from resultsIntersectTreatments
 
     output:
-    set val(filePrefix), file(commonPeaks), file(inisiteClusters) into resultsCluster
+    set val(filePrefix), file(commonPeaks), "${filePrefix}_clusters.bed" into resultsCluster
 
     shell:
     """
-    clusterinisites.py -p !{commonPeaks}
+    clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
     """
   }
 } else {
   process clusterInitiationSites {
 
+    tag { filePrefix }
+
+    publishDir  path: "${params.outputDir}",
+                mode: "copy",
+                saveAs: { filename -> "${filePrefix}_IZ.bed"}
+
+    input:
+    set val(filePrefix), file(commonPeaks) from resultsCallPeaks
+
+    output:
+    set val(filePrefix), file(commonPeaks), "${filePrefix}_clusters.bed" into resultsCluster
+
+    shell:
+    """
+    clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
+    """
   }
+}
+
+process filterInitiationSites {
+
+  tag { filePrefix }
+
+  publishDir  path: "${params.outputDir}",
+              mode: "copy",
+              overwrite: "true",
+              pattern: "*_IS.bed"
+
+  input:
+  set val(filePrefix), file(commonPeaks), file(iniZones) from resultsCluster
+
+  output:
+  set "${filePrefix}_IS.bed" into resultsFilter
+
+  shell:
+  """
+  bedtools intersect -u -wa -a !{commonPeaks} -b !{iniZones} > !{filePrefix}_IS.bed
+  """
+}
+
+workflow.onComplete {
+	println ( workflow.success ? "COMPLETED!" : "FAILED" )
 }
