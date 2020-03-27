@@ -147,80 +147,54 @@ paramChannel = Channel
 
 inputChannel = Channel
                   .from(fileList)
-                  .combine(paramChannel).println()
+                  .combine(paramChannel)
 
 if (params.control) {
   process callPeaksWithControl {
 
-    tag { name }
+    tag { filePrefix }
+
+    publishDir  path: "${params.outputDir}",
+                mode: "copy",
+                overwrite: "true",
+                pattern: "*_MACS.bed"
 
     input:
-    from inputChannel
+    set file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genome), val(filePrefix), file(outputDir) from inputChannel
 
     output:
-    into resultCallPeaks
+    set val(filePrefix), "${filePrefix}_peaks.narrowPeak" into resultsCallPeaks
 
     shell:
     """
-    macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genome} -n !{prefix} --outdir !{outdir} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    echo macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+
+    grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
+   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
     """
   }
 } else {
   process callPeaksWithoutControl {
 
-    tag { name }
+    tag { filePrefix }
+
+    publishDir  path: "${params.outputDir}",
+                mode: "copy",
+                overwrite: "true",
+                pattern: "*_MACS.bed"
 
     input:
-    from inputChannel
+    set file(treatment), val(extensionSize), val(qValueCutoff), val(genome), val(filePrefix), file(outputDir) from inputChannel
 
     output:
-    into resultCallPeaks
+    set val(filePrefix), "${filePrefix}_peaks.narrowPeak" into resultCallPeaks
 
     shell:
     """
-    macs2 callpeak -t !{treatment} -f AUTO -g !{genome} -n !{prefix} --outdir !{outdir} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    echo macs2 callpeak -t !{treatment} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+
+    grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
+   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
     """
   }
-}
-
-process computeInterPeakDistance {
-
-  tag { name }
-
-  input:
-  from resultsCallPeaks
-
-  output:
-  into resultsInterPeakDistance
-
-  shell:
-
-}
-
-process clusterIntiationSite {
-
-  tag { name }
-
-  input:
-  from resultsInterPeakDistance
-
-  output:
-  into resultsCluster
-
-  shell:
-
-}
-
-process filterInititiationSites {
-
-  tag { name }
-
-  input:
-  from resultsCluster
-
-  output:
-  into resultsFilter
-
-  shell:
-
 }
