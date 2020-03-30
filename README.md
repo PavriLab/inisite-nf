@@ -26,7 +26,7 @@ The basic principle of the mapping workflow is abstracted from [Cayrou et al, Ge
 
 i. Install [`nextflow`](https://nf-co.re/usage/installation)
 
-ii. Install [`MACS2`](https://github.com/taoliu/MACS), [`BEDTools`](https://bedtools.readthedocs.io/en/latest/) and [`ClusterScan`](https://github.com/pyrevo/ClusterScan) and the [`pandas`](https://pandas.pydata.org/docs/index.html) Python package
+ii. Install [`MACS2`](https://github.com/taoliu/MACS), [`BEDTools`](https://bedtools.readthedocs.io/en/latest/), [`ClusterScan`](https://github.com/pyrevo/ClusterScan) and the [`pandas`](https://pandas.pydata.org/docs/index.html) Python package
 
 iii. Start running your own analysis!
 
@@ -41,35 +41,35 @@ nextflow run dmalzl/iniseq-nf --treatment ns_seq1.bam --treatment2 ns_seq2.bam [
 ```
 
 ## Main arguments
-### `-profile`
+#### `-profile`
 Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments. For example `-profile slurm` invokes the execution of processes using the [`slurm`](https://slurm.schedmd.com/documentation.html) workload manager. If no profile is given the pipeline will be executed locally.
 
-### `--treatment`
+#### `--treatment`
 Aligned NS-seq reads in any format permitted by MACS
 
-### `--treatment2`
+#### `--treatment2`
 Optional second set of aligned NS-seq reads in any format permitted by MACS
 
-### `--control`
+#### `--control`
 Aligned reads of background signal (e.g. sheared genomic DNA). If not given MACS calls peak without input.
 
 ### `--control2`
 Optional aligned control data set for `--treatment2`. If not given `--control` is used for `--treatment2` as well. If both control arguments are not given MACS calls peaks without input for both.
 
 ## Generic arguments
-### `--genome`
+#### `--genome`
 Genome from which the NS-seq reads originate (same as `-g` option in MACS). Has to be specified.
 
-### `--extensionSize`
+#### `--extensionSize`
 Integer value specifying the length to which each read is extended by MACS before peak calling
 
-### `--qValueCutoff`
+#### `--qValueCutoff`
 Float value between 0 and 1 specifying the q-value cutoff used by MACS to identify significant pileups
 
-### `--filePrefix`
+#### `--filePrefix`
 Prefix for the result files name
 
-### `--outputDir`
+#### `--outputDir`
 Folder to which results will be written (is created if not existing)
 
 ## Credits
