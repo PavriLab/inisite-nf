@@ -161,7 +161,7 @@ if (params.control) {
     set file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genome), val(filePrefix), file(outputDir) from inputChannel
 
     output:
-    set val(filePrefix), "${filePrefix}_peaks.narrowPeak" into resultsCallPeaks
+    set val(filePrefix), file("${filePrefix}_peaks.narrowPeak") into resultsCallPeaks
 
     shell:
     '''
@@ -185,7 +185,7 @@ if (params.control) {
     set file(treatment), val(extensionSize), val(qValueCutoff), val(genome), val(filePrefix), file(outputDir) from inputChannel
 
     output:
-    set val(filePrefix), "${filePrefix}_peaks.narrowPeak" into resultsCallPeaks
+    set val(filePrefix), file("${filePrefix}_peaks.narrowPeak") into resultsCallPeaks
 
     shell:
     '''
@@ -211,7 +211,7 @@ if (params.treatment2) {
     set val(filePrefix1), file(peakFile1), val(filePrefix2), file(peakFile2) from resultCallPeaks.collect
 
     output:
-    set val(filePrefix1), "${filePrefix1}.common.bed" into resultsIntersectTreatments
+    set val(filePrefix1), file("${filePrefix1}.common.bed") into resultsIntersectTreatments
 
     shell:
     """
@@ -234,7 +234,7 @@ if (params.treatment2) {
     set val(filePrefix), file(commonPeaks) from resultsIntersectTreatments
 
     output:
-    set val(filePrefix), file(commonPeaks), "${filePrefix}_clusters.bed" into resultsCluster
+    set val(filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
 
     shell:
     """
@@ -254,7 +254,7 @@ if (params.treatment2) {
     set val(filePrefix), file(commonPeaks) from resultsCallPeaks
 
     output:
-    set val(filePrefix), file(commonPeaks), "${filePrefix}_clusters.bed" into resultsCluster
+    set val(filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
 
     shell:
     """
@@ -276,7 +276,7 @@ process filterInitiationSites {
   set val(filePrefix), file(commonPeaks), file(iniZones) from resultsCluster
 
   output:
-  "${filePrefix}_IS.bed" into resultsFilter
+  file("${filePrefix}_IS.bed") into resultsFilter
 
   shell:
   """
