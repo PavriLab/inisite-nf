@@ -165,7 +165,7 @@ if (params.control) {
 
     shell:
     '''
-    echo macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
 
     grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
    	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
@@ -189,7 +189,7 @@ if (params.control) {
 
     shell:
     '''
-    echo macs2 callpeak -t !{treatment} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    macs2 callpeak -t !{treatment} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
 
     grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
    	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
