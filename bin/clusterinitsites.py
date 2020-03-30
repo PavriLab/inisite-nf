@@ -3,7 +3,6 @@
 import pandas as pd
 import argparse as ap
 import subprocess as sp
-import ntpath
 import logging
 import os
 
