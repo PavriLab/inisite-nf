@@ -164,13 +164,13 @@ if (params.control) {
     output:
     set val(filePrefix), file("${filePrefix}_peaks.narrowPeak") into resultsCallPeaks
 
-    shell:
-    '''
-    macs2 callpeak -t !{treatment} -c !{control} -f !{params.inputFormat} -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    script:
+    """
+    macs2 callpeak -t ${treatment} -c ${control} -f ${params.inputFormat} -g ${genome} -n ${filePrefix} --nomodel --extsize ${extensionSize} -q ${qValueCutoff}
 
-    grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
-   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
-    '''
+    grep -v "^#" ${filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
+   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print \$1, \$2, \$3, \$10, \$9, "+"}\' > ${filePrefix}_MACS.bed
+    """
   }
 } else {
   process callPeaksWithoutControl {
@@ -188,13 +188,13 @@ if (params.control) {
     output:
     set val(filePrefix), file("${filePrefix}_peaks.narrowPeak") into resultsCallPeaks
 
-    shell:
-    '''
-    macs2 callpeak -t !{treatment} -f !{params.inputFormat} -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    script:
+    """
+    macs2 callpeak -t ${treatment} -f ${params.inputFormat} -g ${genome} -n ${filePrefix} --nomodel --extsize ${extensionSize} -q ${qValueCutoff}
 
-    grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
-   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
-    '''
+    grep -v "^#" ${filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
+   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print \$1, \$2, \$3, \$10, \$9, "+"}\' > ${filePrefix}_MACS.bed
+    """
   }
 }
 
