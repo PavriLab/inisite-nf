@@ -13,7 +13,7 @@ parser.add_argument('-p', '--peakfile', required = True,
                     help = 'narrowPeak file containing initiation site coordinates')
 parser.add_argument('-n', '--sitespercluster', default = 2, type = int,
                     help = 'minimum number of sites per identified cluster')
-parser.add_argument('-o', '--outputPrefix', requried = True,
+parser.add_argument('-o', '--outputPrefix', required = True,
                     help = 'prefix for the output file')
 args = parser.parse_args()
 
