@@ -19,7 +19,7 @@ args = parser.parse_args()
 
 # reading in MACS output
 logging.info('generating required annotation file')
-bed = pd.read_csv(args.peakfile, sep = '\t', header = None, usecols = [0, 1, 2, 4],
+bed = pd.read_csv(args.peakfile, sep = '\t', header = None, usecols = [0, 1, 2, 3],
                   names = ['chr', 'start', 'end', 'name'])
 bed['featurename'] = 'ispeak'
 
