@@ -276,7 +276,7 @@ process filterInitiationSites {
   set val(filePrefix), file(commonPeaks), file(iniZones) from resultsCluster
 
   output:
-  set "${filePrefix}_IS.bed" into resultsFilter
+  "${filePrefix}_IS.bed" into resultsFilter
 
   shell:
   """
