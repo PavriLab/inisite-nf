@@ -215,12 +215,12 @@ if (params.treatment2) {
     set val(filePrefix1), file("${filePrefix1}.common.bed") into resultsIntersectTreatments
 
     shell:
-    """
+    '''
     bedtools intersect -wa -a !{peakFile1} -b !{peakFile2} > AB.intersect.bed
     bedtools intersect -wa -b !{peakFile1} -a !{peakFile2} > BA.intersect.bed
     cat *.intersect.bed | sort -k1,1 -k2,2n > !{filePrefix1}.intersect.sort.bed
     bedtools merge -i !{filePrefix1}.intersect.sort.bed -c 4 -o collapse,count,count_distinct > !{filePrefix1}.common.bed
-    """
+    '''
   }
 
   process clusterInitiationSitesFromIntersect {
@@ -238,9 +238,9 @@ if (params.treatment2) {
     set val(filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
 
     shell:
-    """
-    clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
-    """
+    '''
+    clusterinitsites.py -p !{commonPeaks} -o !{filePrefix}
+    '''
   }
 } else {
   process clusterInitiationSitesFromPeaks {
@@ -258,9 +258,9 @@ if (params.treatment2) {
     set val(filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
 
     shell:
-    """
-    clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
-    """
+    '''
+    clusterinitsites.py -p !{commonPeaks} -o !{filePrefix}
+    '''
   }
 }
 
@@ -280,9 +280,9 @@ process filterInitiationSites {
   file("${filePrefix}_IS.bed") into resultsFilter
 
   shell:
-  """
+  '''
   bedtools intersect -u -wa -a !{commonPeaks} -b !{iniZones} > !{filePrefix}_IS.bed
-  """
+  '''
 }
 
 workflow.onComplete {
