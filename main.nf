@@ -145,7 +145,7 @@ paramChannel = Channel
 
 inputChannel = Channel
                   .fromList(fileList)
-                  .combine(paramChannel)
+                  .combine(paramChannel).println()
 
 if (params.control) {
   process callPeaksWithControl {
