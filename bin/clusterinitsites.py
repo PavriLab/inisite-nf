@@ -42,7 +42,7 @@ logging.info('median distance between peaks is %d' % median)
 
 subprocess = sp.Popen('calling clusterscan.py clusterdist {0} {1} -a {2} -d {3} -n {4}'.format(
                             args.peakfile,
-                            annotationFile),
+                            annotationFile,
                             args.outputPrefix,
                             median,
                             args.sitespercluster),
