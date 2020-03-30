@@ -47,7 +47,6 @@ def helpMessage() {
 
     --extensionSize   size to which the reads should be extended
     --qValueCutoff    MACS2  q-value cutoff
-    --inputFormat     BAM, BED, etc. (see MACS documentation for allowed values)
     --genome          genome size to use by MACS (see MACS documentation
                       for allowed values)
 
@@ -166,7 +165,7 @@ if (params.control) {
 
     shell:
     '''
-    macs2 callpeak -t !{treatment} -c !{control} -f !{params.inputFormat} -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
 
     grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
    	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
@@ -190,7 +189,7 @@ if (params.control) {
 
     shell:
     '''
-    macs2 callpeak -t !{treatment} -f !{params.inputFormat} -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    macs2 callpeak -t !{treatment} -f AUTO -g !{genome} -n !{filePrefix} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
 
     grep -v "^#" !{filePrefix}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
    	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{filePrefix}_MACS.bed
