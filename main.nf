@@ -222,7 +222,7 @@ if (params.treatment2) {
     """
   }
 
-  process clusterInitiationSites {
+  process clusterInitiationSitesFromIntersect {
 
     tag { filePrefix }
 
@@ -242,7 +242,7 @@ if (params.treatment2) {
     """
   }
 } else {
-  process clusterInitiationSites {
+  process clusterInitiationSitesFromPeaks {
 
     tag { filePrefix }
 
