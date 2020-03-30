@@ -37,7 +37,7 @@ for group in bed.groupby('chr'):
     for i in frame.index[:-1]:
         distances.append(frame.at[i + 1, 'start'] - frame.at[i, 'end'])
 
-median = pd.Series(distances).median()
+median = int(pd.Series(distances).median())
 logging.info('median distance between peaks is %d' % median)
 
 logging.info('clustering with clusterscan.py clusterdist {0} {1} -a {2} -d {3} -n {4}'.format(
