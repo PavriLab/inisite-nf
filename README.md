@@ -95,4 +95,5 @@ Many thanks to others who have helped out along the way too, including (but not 
   > Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nusbaum C, Myers RM, Brown M, Li W, Liu XS. Model-based analysis of ChIP-Seq (MACS). Genome Biol. 2008;9(9):R137. doi: 10.1186/gb-2008-9-9-r137. Epub 2008 Sep 17. PubMed PMID: 18798982. PubMed Central PMCID: PMC2592715
   
 ### Python Packages
-* [pandas](https://github.com/pandas-dev/pandas)
+* [pandas](https://pandas.pydata.org/docs/index.html)
+  > Wes McKinney. Data Structures for Statistical Computing in Python, Proceedings of the 9th Python in Science Conference, 51-56 (2010)
