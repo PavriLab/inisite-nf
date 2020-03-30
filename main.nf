@@ -239,7 +239,7 @@ if (params.treatment2) {
 
     shell:
     """
-    bin/clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
+    clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
     """
   }
 } else {
@@ -259,7 +259,7 @@ if (params.treatment2) {
 
     shell:
     """
-    bin/clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
+    clusterinisites.py -p !{commonPeaks} -o !{filePrefix}
     """
   }
 }
