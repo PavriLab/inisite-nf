@@ -45,8 +45,8 @@ logging.info('clustering with clusterscan.py clusterdist {0} {1} -a {2} -d {3} -
                             annotationFile,
                             args.outputPrefix,
                             median,
-                            args.sitespercluster)')
-                            
+                            args.sitespercluster))
+
 subprocess = sp.Popen('clusterscan.py clusterdist {0} {1} -a {2} -d {3} -n {4}'.format(
                             args.peakfile,
                             annotationFile,
