@@ -126,15 +126,15 @@ if (params.treatment2) {
 }
 
 if (!params.treatment2 && !params.control) {
-  fileList = [[params.treatment]]
+  fileList = [[file(params.treatment)]]
 } else if (!params.treatment2 && params.control) {
-  fileList = [[params.treatment, params.control]]
+  fileList = [[file(params.treatment), file(params.control)]]
 } else if (params.treatment2 && !params.control) {
-  fileList = [[params.treatment],
-              [params.treatment2]]
+  fileList = [[file(params.treatment)],
+              [file(params.treatment2)]]
 } else {
-  fileList = [[params.treatment, params.control],
-              [params.treatment2, params.control2]]
+  fileList = [[file(params.treatment), file(params.control)],
+              [file(params.treatment2), file(params.control2)]]
 }
 
 paramChannel = Channel
