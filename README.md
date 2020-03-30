@@ -53,7 +53,7 @@ Optional second set of aligned NS-seq reads in any format permitted by MACS
 #### `--control`
 Aligned reads of background signal (e.g. sheared genomic DNA). If not given MACS calls peak without input.
 
-### `--control2`
+#### `--control2`
 Optional aligned control data set for `--treatment2`. If not given `--control` is used for `--treatment2` as well. If both control arguments are not given MACS calls peaks without input for both.
 
 ## Generic arguments
