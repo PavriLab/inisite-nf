@@ -41,7 +41,7 @@ median = pd.Series(distances).median()
 logging.info('median distance between peaks is %d' % median)
 
 logging.info('clustering initiation sites')
-subprocess = sp.Popen('clusterdist {0} {1} -a {2} -d {3} -n {4}'.format(
+subprocess = sp.Popen('clusterscan.py clusterdist {0} {1} -a {2} -d {3} -n {4}'.format(
                             args.peakfile,
                             annotationFile,
                             args.outputPrefix,
