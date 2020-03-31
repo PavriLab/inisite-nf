@@ -247,7 +247,7 @@ if (params.treatment2) {
 
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
-                saveAs: { filename -> "${filePrefix}_IZ.bed"}
+                saveAs: { filename -> "${params.filePrefix}_IZ.bed"}
 
     input:
     file(commonPeaks) from resultsCallPeaks
