@@ -3,7 +3,7 @@
 /*
 * MIT License
 *
-* Copyright (c) 2019 Tobias Neumann, Daniel Malzl
+* Copyright (c) 2020 Daniel Malzl, Tobias Neumann
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ def helpMessage() {
   Reproducible calling of initiation sites from nascent strand sequencing data
 
   Usage:
-  nextflow run dmalzl/inisite-nf
+  nextflow run dmalzl/inisite-nf --treatment treatment.bam --genome mm [OPTIONS]
 
   Options:
     --treatment       BAM file containing aligned nacsent strand reads
@@ -52,6 +52,10 @@ def helpMessage() {
 
     --filePrefix      prefix to use for output files
     --outputDir       name of the directory to save results to
+    
+    Authors:
+    Daniel Malzl (daniel.malzl@imp.ac.at)
+    Tobias Neumann (tobias.neumann@imp.ac.at)
   """.stripIndent()
 }
 
