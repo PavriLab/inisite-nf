@@ -211,7 +211,7 @@ if (params.treatment2) {
                 pattern: "*.common.bed"
 
     input:
-    set file(peakFile1), file(peakFile2) from resultCallPeaks.collect()
+    set file(peakFile1), file(peakFile2) from resultsCallPeaks.collect()
 
     output:
     set val(params.filePrefix), file("${params.filePrefix}.common.bed") into resultsIntersectTreatments
