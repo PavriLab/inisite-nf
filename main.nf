@@ -89,8 +89,10 @@ if (params.treatment2) {
   }
 
   params.control2 = params.control
-  if (!file(params.control2).exists()) {
-    exit 1, "--control2 was specified but ${params.control2} does not exist!"
+  if (params.control2) {
+    if (!file(params.control2).exists()) {
+      exit 1, "--control2 was specified but ${params.control2} does not exist!"
+    }
   }
 
   log.info ""
