@@ -232,6 +232,7 @@ if (params.treatment2) {
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
                 saveAs: { filename -> "${filePrefix}_IZ.bed"}
+                pattern: "*_clusters.bed"
 
     input:
     set val(filePrefix), file(commonPeaks) from resultsIntersectTreatments
@@ -252,6 +253,7 @@ if (params.treatment2) {
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
                 saveAs: { filename -> "${params.filePrefix}_IZ.bed"}
+                pattern: "*_clusters.bed"
 
     input:
     file(commonPeaks) from resultsCallPeaks
