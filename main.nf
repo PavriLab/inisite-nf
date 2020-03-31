@@ -161,6 +161,7 @@ if (params.control) {
 
     output:
     file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
+    file("${treatment.getSimpleName()}_MACS.bed") into calledPeaks
 
     shell:
     '''
@@ -185,6 +186,7 @@ if (params.control) {
 
     output:
     file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
+    file("${treatment.getSimpleName()}_MACS.bed") into calledPeaks
 
     shell:
     '''
