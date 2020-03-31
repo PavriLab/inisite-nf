@@ -160,17 +160,15 @@ if (params.control) {
     set file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genome), file(outputDir) from inputChannel
 
     output:
-    set file("${filename}_peaks.narrowPeak") into resultsCallPeaks
+    set file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
 
-    script:
-    filename = treatment.getSimpleName()
+    shell:
+    '''
+    macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genome} -n !{treatment.getSimpleName()} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
 
-    """
-    macs2 callpeak -t ${treatment} -c ${control} -f AUTO -g ${genome} -n ${filename} --nomodel --extsize ${extensionSize} -q ${qValueCutoff}
-
-    grep -v '^#' ${filename}_peaks.xls | grep -v fold_enrichment | grep -v '^$' | \\
-   	awk \'BEGIN{FS='\t'; OFS='\t'} {print \$1, \$2, \$3, \$10, \$9, \"+\"}\' > ${filename}_MACS.bed
-    """
+    grep -v "^#" !{treatment.getSimpleName()}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
+   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{treatment.getSimpleName()}_MACS.bed
+    '''
   }
 } else {
   process callPeaksWithoutControl {
@@ -186,24 +184,22 @@ if (params.control) {
     set file(treatment), val(extensionSize), val(qValueCutoff), val(genome), file(outputDir) from inputChannel
 
     output:
-    set file("${filename}_peaks.narrowPeak") into resultsCallPeaks
+    set file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
 
-    script:
-    filename = treatment.getSimpleName()
+    shell:
+    '''
+    macs2 callpeak -t !{treatment} -f AUTO -g !{genome} -n !{treatment.getSimpleName()} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
 
-    """
-    macs2 callpeak -t ${treatment} -f AUTO -g ${genome} -n ${filename} --nomodel --extsize ${extensionSize} -q ${qValueCutoff}
-
-    grep -v '^#' ${filename}_peaks.xls | grep -v fold_enrichment | grep -v '^$' | \\
-   	awk \'BEGIN{FS='\t'; OFS='\t'} {print \$1, \$2, \$3, \$10, \$9, \"+\"}\' > ${filename}_MACS.bed
-    """
+    grep -v "^#" !{treatment.getSimpleName()}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
+   	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{treatment.getSimpleName()}_MACS.bed
+    '''
   }
 }
 
 if (params.treatment2) {
   process intersectTreatments {
 
-    tag { filePrefix1 }
+    tag { params.filePrefix }
 
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
@@ -257,7 +253,7 @@ if (params.treatment2) {
     set file(commonPeaks) from resultsCallPeaks
 
     output:
-    set val(params.filePrefix), file(commonPeaks), file("${params.filePrefix}_clusters.bed") into resultsCluster
+    set val(params.filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
 
     shell:
     '''
