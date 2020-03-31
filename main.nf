@@ -38,20 +38,20 @@ def helpMessage() {
   Options:
     --treatment       BAM file containing aligned nacsent strand reads
     --treatment2      BAM file containing aligned nascent strand reads for
-                      an additional experiment
-    --control         BAM files containing aligned control reads
+                      an additional experiment (Default: null)
+    --control         BAM files containing aligned control reads (Default: null)
     --control2        BAM files containing aligned control reads for
                       an additional experiment. If not given --control
-                      is reused.
+                      is reused. (Default: null)
 
 
-    --extensionSize   size to which the reads should be extended
-    --qValueCutoff    MACS2  q-value cutoff
+    --extensionSize   size to which the reads should be extended (Default: 275bp)
+    --qValueCutoff    MACS2  q-value cutoff (Default: 0.05)
     --genome          genome size to use by MACS (see MACS documentation
                       for allowed values)
 
-    --filePrefix      prefix to use for output files
-    --outputDir       name of the directory to save results to
+    --filePrefix      prefix to use for output files (Default: NSpeaks)
+    --outputDir       name of the directory to save results to (Default: results)
     
     Authors:
     Daniel Malzl (daniel.malzl@imp.ac.at)
