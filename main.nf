@@ -253,11 +253,11 @@ if (params.treatment2) {
     file(commonPeaks) from resultsCallPeaks
 
     output:
-    set val(params.filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
+    set val(params.filePrefix), file(commonPeaks), file("${params.filePrefix}_clusters.bed") into resultsCluster
 
     shell:
     '''
-    clusterinitsites.py -p !{commonPeaks} -o !{filePrefix}
+    clusterinitsites.py -p !{commonPeaks} -o !{params.filePrefix}
     '''
   }
 }
