@@ -231,7 +231,7 @@ if (params.treatment2) {
 
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
-                saveAs: { filename -> "${filePrefix}_IZ.bed"}
+                saveAs: { filename -> "${filePrefix}_IZ.bed"},
                 pattern: "*_clusters.bed"
 
     input:
@@ -252,7 +252,7 @@ if (params.treatment2) {
 
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
-                saveAs: { filename -> "${params.filePrefix}_IZ.bed"}
+                saveAs: { filename -> "${params.filePrefix}_IZ.bed"},
                 pattern: "*_clusters.bed"
 
     input:
