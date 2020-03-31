@@ -160,7 +160,7 @@ if (params.control) {
     set file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genome), file(outputDir) from inputChannel
 
     output:
-    set file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
+    file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
 
     shell:
     '''
@@ -184,7 +184,7 @@ if (params.control) {
     set file(treatment), val(extensionSize), val(qValueCutoff), val(genome), file(outputDir) from inputChannel
 
     output:
-    set file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
+    file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
 
     shell:
     '''
@@ -243,14 +243,14 @@ if (params.treatment2) {
 } else {
   process clusterInitiationSitesFromPeaks {
 
-    tag { filePrefix }
+    tag { params.filePrefix }
 
     publishDir  path: "${params.outputDir}",
                 mode: "copy",
                 saveAs: { filename -> "${filePrefix}_IZ.bed"}
 
     input:
-    set file(commonPeaks) from resultsCallPeaks
+    file(commonPeaks) from resultsCallPeaks
 
     output:
     set val(params.filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
