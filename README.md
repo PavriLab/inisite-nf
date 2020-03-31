@@ -77,6 +77,21 @@ Prefix for the result files name
 #### `--outputDir`
 Folder to which results will be written (is created if not existing)
 
+## Results
+
+The pipeline's results comprise 3 to 5 files depending on the number of treatment files given (i.e. single or dual mode). If the pipeline is run in single mode the `--outputDir` will contain 3 files:
+
+1.  A `*_MACS.bed` file containing the original peak called by macs2, named according to the treatment BAM basename
+2.  A `*_IS.bed` file containing the cluster-filtered MACS peaks
+3.  A `*_IZ.bed` file containing the clusters called by ClusterScan and used to filter the MACS peaks
+
+If the pipeline is run in dual mode the `--outputDir` will contain 5 files:
+
+1.  Two `*_MACS.bed` file containing the original peaks called by macs2 for each treatment BAM, named according to the treatment BAM basename
+2.  A `*.common.bed` containing all MACS peaks found in both treatment BAMs
+3.  A `*_IS.bed` file containing the cluster-filtered common MACS peaks
+4.  A `*_IZ.bed` file containing the clusters called by ClusterScan and used to filter the common MACS peaks
+
 ## Credits
 
 The pipeline was developed by [Daniel Malzl](mailto:daniel.malzl@gmx.at) for use at the [IMP](https://www.imp.ac.at/), Vienna.
