@@ -47,7 +47,7 @@ nextflow run dmalzl/iniseq-nf --treatment ns_seq1.bam --treatment2 ns_seq2.bam [
 
 ## Main arguments
 #### `-profile`
-Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments. For example `-profile slurm` invokes the execution of processes using the [`slurm`](https://slurm.schedmd.com/documentation.html) workload manager. If no profile is given the pipeline will be executed locally.
+Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments. For example `-profile cbe` invokes the execution of processes using the [`slurm`](https://slurm.schedmd.com/documentation.html) workload manager. If no profile is given the pipeline will be executed locally.
 
 #### `--treatment`
 Aligned NS-seq reads in any format permitted by MACS
