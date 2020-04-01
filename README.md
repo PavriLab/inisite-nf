@@ -90,13 +90,11 @@ If the pipeline is run in dual mode the `--outputDir` will contain 5 files:
 4.  A `*_IZ.bed` file containing the clusters called by ClusterScan and used to filter the common MACS peaks
 
 ## Credits
-
 The pipeline was developed by [Daniel Malzl](mailto:daniel.malzl@gmx.at) for use at the [IMP](https://www.imp.ac.at/), Vienna.
 
 Many thanks to others who have helped out along the way too, including (but not limited to): [@t-neumann](https://github.com/t-neumann), [@pditommaso](https://github.com/pditommaso).
 
 ## Citations
-
 ### Pipeline tools
 * [Nextflow](https://www.ncbi.nlm.nih.gov/pubmed/28398311/)
   > Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow enables reproducible computational workflows. Nat Biotechnol. 2017 Apr 11;35(4):316-319. doi: 10.1038/nbt.3820. PubMed PMID: 28398311.
