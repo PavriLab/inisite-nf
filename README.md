@@ -3,7 +3,6 @@
 [![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A519.10.0-brightgreen.svg)](https://www.nextflow.io/)
 
 ## Introduction
-
 **inisite-nf** is a bioinformatics analysis pipeline used for mapping initiation sites from nascent strand sequencing data (NS-seq).
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner.
@@ -23,7 +22,6 @@ The basic principle of the mapping workflow is abstracted from [Cayrou et al, Ge
 4.  Filtering common peaks by overlap with identified peak clusters with BEDTools ([BEDTools](https://bedtools.readthedocs.io/en/latest/))
 
 ## Quick Start
-
 i. Install [`nextflow`](https://nf-co.re/usage/installation)
 
 ii. Install [`MACS2`](https://github.com/taoliu/MACS), [`BEDTools`](https://bedtools.readthedocs.io/en/latest/), [`ClusterScan`](https://github.com/pyrevo/ClusterScan) and the [`pandas`](https://pandas.pydata.org/docs/index.html) Python package
@@ -78,7 +76,6 @@ Prefix for the result files name
 Folder to which results will be written (is created if not existing)
 
 ## Results
-
 The pipeline's results comprise 3 to 5 files depending on the number of treatment files given (i.e. single or dual mode). If the pipeline is run in single mode the `--outputDir` will contain 3 files:
 
 1.  A `*_MACS.bed` file containing the original peak called by macs2, named according to the treatment BAM basename
@@ -101,7 +98,6 @@ Many thanks to others who have helped out along the way too, including (but not 
 ## Citations
 
 ### Pipeline tools
-
 * [Nextflow](https://www.ncbi.nlm.nih.gov/pubmed/28398311/)
   > Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow enables reproducible computational workflows. Nat Biotechnol. 2017 Apr 11;35(4):316-319. doi: 10.1038/nbt.3820. PubMed PMID: 28398311.
 
