@@ -47,7 +47,6 @@ def helpMessage() {
 
     --extensionSize   size to which the reads should be extended (Default: 275bp)
     --qValueCutoff    MACS2  q-value cutoff (Default: 0.05)
-    --bdg             save MACS bedgraph (Default: false)
 
     --filePrefix      prefix to use for output files (Default: NSpeaks)
     --outputDir       name of the directory to save results to (Default: results)
@@ -196,7 +195,6 @@ if (params.treatment2) {
   log.info " control2                 : ${params.control2}"
   log.info " extensionSize            : ${params.extensionSize}"
   log.info " qValueCutoff             : ${params.qValueCutoff}"
-  log.info " write bedgraphs          : ${params.bdg}"
   log.info " genome                   : ${params.genome}"
   log.info " Fasta                    : ${fastaFile}"
   log.info " bowtieIndex              : ${bowtieIndexFile}"
@@ -213,7 +211,6 @@ if (params.treatment2) {
   log.info " control                  : ${params.control}"
   log.info " extensionSize            : ${params.extensionSize}"
   log.info " qValueCutoff             : ${params.qValueCutoff}"
-  log.info " write bedgraphs          : ${params.bdg}"
   log.info " genome                   : ${params.genome}"
   log.info " Fasta                    : ${fastaFile}"
   log.info " bowtieIndex              : ${bowtieIndexFile}"
@@ -367,7 +364,7 @@ if (params.control) {
 
     tag { treatment.getSimpleName() }
 
-    publishDir  path: "${params.outputDir}",
+    publishDir  path: "${params.outputDir}/peaks",
                 mode: "copy",
                 overwrite: "true",
                 pattern: "*_MACS.bed"
@@ -396,7 +393,7 @@ if (params.treatment2) {
 
     tag { params.filePrefix }
 
-    publishDir  path: "${params.outputDir}",
+    publishDir  path: "${params.outputDir}/peaks",
                 mode: "copy",
                 overwrite: "true",
                 pattern: "*.common.bed"
@@ -421,7 +418,7 @@ if (params.treatment2) {
 
     tag { filePrefix }
 
-    publishDir  path: "${params.outputDir}",
+    publishDir  path: "${params.outputDir}/peaks",
                 mode: "copy",
                 saveAs: { filename -> "${filePrefix}_IZ.bed"},
                 pattern: "*_clusters.bed"
@@ -444,7 +441,7 @@ if (params.treatment2) {
 
     tag { params.filePrefix }
 
-    publishDir  path: "${params.outputDir}",
+    publishDir  path: "${params.outputDir}/peaks",
                 mode: "copy",
                 saveAs: { filename -> "${params.filePrefix}_IZ.bed"},
                 pattern: "*_clusters.bed"
@@ -468,7 +465,7 @@ process filterInitiationSites {
 
   tag { filePrefix }
 
-  publishDir  path: "${params.outputDir}",
+  publishDir  path: "${params.outputDir}/peaks",
               mode: "copy",
               overwrite: "true",
               pattern: "*_IS.bed"
