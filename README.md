@@ -3,7 +3,6 @@
 [![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A519.10.0-brightgreen.svg)](https://www.nextflow.io/)
 
 ## Introduction
-
 **inisite-nf** is a bioinformatics analysis pipeline used for mapping initiation sites from nascent strand sequencing data (NS-seq).
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner.
@@ -23,7 +22,6 @@ The basic principle of the mapping workflow is abstracted from [Cayrou et al, Ge
 4.  Filtering common peaks by overlap with identified peak clusters with BEDTools ([BEDTools](https://bedtools.readthedocs.io/en/latest/))
 
 ## Quick Start
-
 i. Install [`nextflow`](https://nf-co.re/usage/installation)
 
 ii. Install [`MACS2`](https://github.com/taoliu/MACS), [`BEDTools`](https://bedtools.readthedocs.io/en/latest/), [`ClusterScan`](https://github.com/pyrevo/ClusterScan) and the [`pandas`](https://pandas.pydata.org/docs/index.html) Python package
@@ -47,7 +45,7 @@ nextflow run dmalzl/iniseq-nf --treatment ns_seq1.bam --treatment2 ns_seq2.bam [
 
 ## Main arguments
 #### `-profile`
-Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments. For example `-profile slurm` invokes the execution of processes using the [`slurm`](https://slurm.schedmd.com/documentation.html) workload manager. If no profile is given the pipeline will be executed locally.
+Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments. For example `-profile cbe` invokes the execution of processes using the [`slurm`](https://slurm.schedmd.com/documentation.html) workload manager. If no profile is given the pipeline will be executed locally.
 
 #### `--treatment`
 Aligned NS-seq reads in any format permitted by MACS
@@ -77,16 +75,27 @@ Prefix for the result files name
 #### `--outputDir`
 Folder to which results will be written (is created if not existing)
 
-## Credits
+## Results
+The pipeline's results comprise 3 to 5 files depending on the number of treatment files given (i.e. single or dual mode). If the pipeline is run in single mode the `--outputDir` will contain 3 files:
 
+1.  A `*_MACS.bed` file containing the original peak called by macs2, named according to the treatment BAM basename
+2.  A `*_IS.bed` file containing the cluster-filtered MACS peaks
+3.  A `*_IZ.bed` file containing the clusters called by ClusterScan and used to filter the MACS peaks
+
+If the pipeline is run in dual mode the `--outputDir` will contain 5 files:
+
+1.  Two `*_MACS.bed` file containing the original peaks called by macs2 for each treatment BAM, named according to the treatment BAM basename
+2.  A `*.common.bed` containing all MACS peaks found in both treatment BAMs
+3.  A `*_IS.bed` file containing the cluster-filtered common MACS peaks
+4.  A `*_IZ.bed` file containing the clusters called by ClusterScan and used to filter the common MACS peaks
+
+## Credits
 The pipeline was developed by [Daniel Malzl](mailto:daniel.malzl@gmx.at) for use at the [IMP](https://www.imp.ac.at/), Vienna.
 
 Many thanks to others who have helped out along the way too, including (but not limited to): [@t-neumann](https://github.com/t-neumann), [@pditommaso](https://github.com/pditommaso).
 
 ## Citations
-
 ### Pipeline tools
-
 * [Nextflow](https://www.ncbi.nlm.nih.gov/pubmed/28398311/)
   > Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow enables reproducible computational workflows. Nat Biotechnol. 2017 Apr 11;35(4):316-319. doi: 10.1038/nbt.3820. PubMed PMID: 28398311.
 

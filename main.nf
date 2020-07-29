@@ -3,7 +3,7 @@
 /*
 * MIT License
 *
-* Copyright (c) 2019 Tobias Neumann, Daniel Malzl
+* Copyright (c) 2020 Daniel Malzl, Tobias Neumann
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -33,20 +33,29 @@ def helpMessage() {
   Reproducible calling of initiation sites from nascent strand sequencing data
 
   Usage:
-  nextflow run dmalzl/inisite-nf
+  nextflow run dmalzl/inisite-nf --treatment treatment.bam --genome mm [OPTIONS]
 
   Options:
+<<<<<<< HEAD
     --treatment       fastq file containing aligned nacsent strand reads
     --treatment2      fastq file containing aligned nascent strand reads for
                       an additional experiment (Default: null)
     --control         fastq file containing aligned control reads (Default: null)
     --control2        fastq file containing aligned control reads for
+=======
+    --treatment       BAM file containing aligned nacsent strand reads
+    --treatment2      BAM file containing aligned nascent strand reads for
+                      an additional experiment (Default: null)
+    --control         BAM files containing aligned control reads (Default: null)
+    --control2        BAM files containing aligned control reads for
+>>>>>>> bdf5d283883d299198c91e22c1cb11269acfdf74
                       an additional experiment. If not given --control
                       is reused. (Default: null)
 
 
     --extensionSize   size to which the reads should be extended (Default: 275bp)
     --qValueCutoff    MACS2  q-value cutoff (Default: 0.05)
+<<<<<<< HEAD
     --bdg             save MACS bedgraph (Default: false)
 
     --filePrefix      prefix to use for output files (Default: NSpeaks)
@@ -69,6 +78,17 @@ def helpMessage() {
   Authors:
   Tobias Neumann (tobias.neumann@imp.ac.at)
   Daniel Malzl (daniel.malzl@imp.ac.at)
+=======
+    --genome          genome size to use by MACS (see MACS documentation
+                      for allowed values)
+
+    --filePrefix      prefix to use for output files (Default: NSpeaks)
+    --outputDir       name of the directory to save results to (Default: results)
+    
+    Authors:
+    Daniel Malzl (daniel.malzl@imp.ac.at)
+    Tobias Neumann (tobias.neumann@imp.ac.at)
+>>>>>>> bdf5d283883d299198c91e22c1cb11269acfdf74
   """.stripIndent()
 }
 
