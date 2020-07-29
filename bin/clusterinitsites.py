@@ -13,6 +13,8 @@ parser.add_argument('-p', '--peakfile', required = True,
                     help = 'narrowPeak file containing initiation site coordinates')
 parser.add_argument('-n', '--sitespercluster', default = 2, type = int,
                     help = 'minimum number of sites per identified cluster')
+parser.add_argument('--clusterScan', required = True,
+                    help = 'path to clusterscan.py script')
 parser.add_argument('-o', '--outputPrefix', required = True,
                     help = 'prefix for the output file')
 args = parser.parse_args()
@@ -47,7 +49,8 @@ logging.info('clustering with clusterscan.py clusterdist {0} {1} -a {2} -d {3} -
                             median,
                             args.sitespercluster))
 
-subprocess = sp.Popen('clusterscan.py clusterdist {0} {1} -a {2} -d {3} -n {4}'.format(
+subprocess = sp.Popen('{0} clusterdist {1} {2} -a {3} -d {4} -n {5}'.format(
+                            args.clusterScan,
                             args.peakfile,
                             annotationFile,
                             args.outputPrefix,

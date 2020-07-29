@@ -33,7 +33,7 @@ def helpMessage() {
   Reproducible calling of initiation sites from nascent strand sequencing data
 
   Usage:
-  nextflow run dmalzl/inisite-nf --treatment treatment.bam --genome mm [OPTIONS]
+  nextflow run pavirlab/inisite-nf --treatment treatment.bam --genome mm [OPTIONS]
 
   Options:
     --treatment       fastq file containing aligned nacsent strand reads
@@ -430,8 +430,10 @@ if (params.treatment2) {
     set val(filePrefix), file(commonPeaks), file("${filePrefix}_clusters.bed") into resultsCluster
 
     shell:
+    clusterScanScript = "${NXF_HOME}/assets/pavrilab/hicer-nf/bin/clusterscan.py"
+
     '''
-    clusterinitsites.py -p !{commonPeaks} -o !{filePrefix}
+    clusterinitsites.py -p !{commonPeaks} --clusterScan !{clusterScanScript} -o !{filePrefix}
     '''
 
   }
@@ -453,8 +455,10 @@ if (params.treatment2) {
     set val(params.filePrefix), file(commonPeaks), file("${params.filePrefix}_clusters.bed") into resultsCluster
 
     shell:
+    clusterScanScript = "${NXF_HOME}/assets/pavrilab/hicer-nf/bin/clusterscan.py"
+
     '''
-    clusterinitsites.py -p !{commonPeaks} -o !{params.filePrefix}
+    clusterinitsites.py -p !{commonPeaks} --clusterScan !{clusterScanScript} -o !{params.filePrefix}
     '''
 
   }
