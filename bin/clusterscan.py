@@ -161,17 +161,17 @@ def main():
 
     # choose the algorithm
     if arguments['clusterdist'] is True:
-        print "ClusterScan is running with clusterdist..."
+        print("ClusterScan is running with clusterdist...")
 
         # movq: arguments should be changed
         table = do_clusterdist(l,pdtable, table, arguments)
     else:
-        print "ClusterScan is running with clustermean..."
+        print("ClusterScan is running with clustermean...")
 
         table = do_clustermean(l, pdtable, table, arguments)
 
     if table.empty:
-        print "ClusterScan didn't found any cluster!"
+        print("ClusterScan didn't found any cluster!")
         exit()
     else:
         pass
@@ -302,11 +302,11 @@ def main():
     rpy2_plotter(summary, table, plot_name)
 
     if arguments['--singletons'] is True:
-        print "Singletons identification has been launched..."
+        print("Singletons identification has been launched...")
         singletons = pd.DataFrame()
         singletons = do_singletons(l, pdtable, bedTbl, singletons, arguments)
         if singletons.empty:
-            print "ClusterScan didn't found any singleton!"
+            print("ClusterScan didn't found any singleton!")
         else:
             if arguments['--analysis'] is None:
                 st_name = os.path.join(arguments['--output'], 'singletons.tsv')
@@ -321,9 +321,9 @@ def main():
     else:
         pass
 
-    print '\n%s\t%s' % ("Total number of unique features scanned:", len(n))
-    print '%s\t%s' % ("Total number of unique categories scanned:", len(l))
-    print '%s\t%s\n' % ("Total number of clusters found:", c)
+    print('\n%s\t%s' % ("Total number of unique features scanned:", len(n)))
+    print('%s\t%s' % ("Total number of unique categories scanned:", len(l)))
+    print('%s\t%s\n' % ("Total number of clusters found:", c))
 
 
 # program execution
@@ -331,4 +331,4 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='ClusterScan 0.2.1')
     # print arguments
     main()
-    print "--- %s seconds ---" % (int(round(time.time() - start_time, 0)))
+    print("--- %s seconds ---" % (int(round(time.time() - start_time, 0))))
