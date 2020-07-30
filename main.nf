@@ -94,7 +94,7 @@ if (params.genomeSize) {
 }
 
 if (!params.bowtieIndex) {
-  if (!params.fasta) {
+  if (!params.fasta && !igenomes_bowtie) {
     exit 1, "Fasta needed for BowtieIndex not specified!"
 
   } else if (params.fasta && !igenomes_fasta) {
