@@ -260,7 +260,7 @@ preprocessChannel = Channel
                         .fromList(files2Align)
 
 process trimReads {
-    tag { name }
+    tag { fastqFile }
 
     input:
     set val(num), file(fastqFile) from preprocessChannel
@@ -502,7 +502,6 @@ process filterInitiationSites {
 }
 
 process multiqc {
-
     tag { 'all' }
 
     publishDir path: "${params.outputDir}",
