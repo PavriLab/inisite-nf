@@ -246,7 +246,7 @@ if (!params.treatment2 && !params.control) {
   files2Align = [[1, file(params.treatment)]]
 
 } else if (!params.treatment2 && params.control) {
-  files2Align = [[1, file(params.treatment)), (1, file(params.control)]]
+  files2Align = [[1, file(params.treatment)], [1, file(params.control)]]
 
 } else if (params.treatment2 && !params.control) {
   files2Align = [[1, file(params.treatment), (2, file(params.treatment2)]]
