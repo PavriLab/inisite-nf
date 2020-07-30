@@ -11,14 +11,14 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 The basic principle of the mapping workflow is abstracted from [Cayrou et al, Genome Research 2015](http://genome.cshlp.org/content/25/12/1873). In brief, we use the MACS peak caller to map NS-seq peaks genome-wide. There are two modes the input can be processed, dependent on if a second NS-seq data set is given or not.
 
 **a.  Single NS-seq data**
-1.  Adapter trimming with cutadapt ([cutadapt](https://cutadapt.readthedocs.io/en/stable/))
+1.  Adapter and quality trimming with trim_galore ([trim_galore](https://github.com/FelixKrueger/TrimGalore))
 2.  Alignment of reads with bowtie ([bowtie](http://bowtie-bio.sourceforge.net/manual.shtml))
 3.  Calling narrow peaks with or without control using MACS2 ([MACS2](https://github.com/taoliu/MACS))
 4.  Spatial clustering of MACS peaks with ClusterScan ([ClusterScan](https://github.com/pyrevo/ClusterScan))
 5.  Filtering MACS peaks by overlap with identified peak clusters with BEDTools ([BEDTools](https://bedtools.readthedocs.io/en/latest/))
 
 **b.  Dual NS-seq data**
-1.  Adapter trimming with cutadapt ([cutadapt](https://cutadapt.readthedocs.io/en/stable/))
+1.  Adapter and quality trimming with trim_galore ([trim_galore](https://github.com/FelixKrueger/TrimGalore))
 2.  Alignment of reads with bowtie ([bowtie](http://bowtie-bio.sourceforge.net/manual.shtml))
 3.  Calling narrow peaks for both datasets with or without control using MACS2 ([MACS2](https://github.com/taoliu/MACS))
 4.  Identifying and retaining peaks common to both datasets with BEDTools ([BEDTools](https://bedtools.readthedocs.io/en/latest/))
@@ -39,7 +39,7 @@ iv. Start running your own analysis!
 
 **a. Single**
 ```bash
-nextflow run dmalzl/iniseq-nf --treatment ns_seq1.fastq [--control control1.fastq] --genome mm
+nextflow run dmalzl/iniseq-nf --treatment ns_seq1.fastq [--control control1.fastq] --genome mm9
 ```
 
 **b. Dual**
