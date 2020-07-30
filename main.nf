@@ -267,17 +267,25 @@ process trimReads {
 
     output:
     set val(num), val(name), file("${name}_trimmed.fq") into alignChannel
+    file("${parameters.name}/*_fastqc.{zip,html}") into fastqcResults
+    file("${parameters.name}/*trimming_report.txt") into trimgaloreResults
 
     shell:
+    lastPath = fastqFile.toString().lastIndexOf(File.separator)
+    readBase = fastqFile.toString().substring(lastPath+1)
     name = fastqFile.toString() - ~/(\.fq)?(\.fastq)?$/
     '''
-    cutadapt -N \
-             -O 4 \
-             -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC \
-             -m 18 \
-             -j !{task.cpus} \
-             -o !{name}_trimmed.fq \
-             !{fastqFile}
+    trim_galore --quality 20 \
+                --fastqc \
+                --length 18 \
+                --illumina \
+                --dont_gzip \
+                --basename !{name}_trimmed \
+                --cores !{task.cpus} \
+                !{fastqFile} \
+
+    mv !{readBase}_trimming_report.txt !{name}_trimmed.fq_trimming_report.txt
+    sed -i 's/Command line parameters:.*\$/Command line parameters: !{name}_trimmed/g' !{name}_trimmed.fq_trimming_report.txt
     '''
 
 }
@@ -296,6 +304,7 @@ process alignReads {
 
     output:
     set val(num), val(name), file(bam) into alignOutputChannel
+    file "*.{flagstat,idxstats,stats}" into bowtieMultiqcChannel
 
     shell:
     '''
@@ -318,6 +327,11 @@ process alignReads {
                   -O BAM \
                   -o !{name}.bam \
                   !{name}.sam
+
+    samtools index ${name}.bam
+    samtools flagstat ${name}.bam > ${name}.bam.flagstat
+    samtools idxstats ${name}.bam > ${name}.bam.idxstats
+    samtools stats ${name}.bam > ${name}.bam.stats
     '''
 
 }
@@ -485,6 +499,30 @@ process filterInitiationSites {
   bedtools intersect -u -wa -a !{commonPeaks} -b !{iniZones} > !{filePrefix}_IS.bed
   '''
 
+}
+
+process multiqc {
+
+    tag { 'all' }
+
+    publishDir path: "${params.outputDir}",
+               mode: 'copy',
+               overwrite: 'true'
+
+    input:
+    file (fastqc: 'fastqc/*') from fastqcResults.collect()
+    file (trim: 'trim/*') from trimgaloreResults.collect()
+    file (bowtie: 'bowtie/*') from bowtieMultiqcChannel.collect()
+
+    output:
+    file "*multiqc_report.html" into multiqc_report
+
+    script:
+    """
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    multiqc -f -x *.run .
+    """
 }
 
 workflow.onComplete {
