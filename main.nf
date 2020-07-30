@@ -260,7 +260,7 @@ preprocessChannel = Channel
                         .fromList(files2Align)
 
 process trimReads {
-    tag { fastqFile }
+    tag { name }
 
     input:
     set val(num), file(fastqFile) from preprocessChannel
