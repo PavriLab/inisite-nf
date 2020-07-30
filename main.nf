@@ -357,7 +357,11 @@ if (params.control) {
                 pattern: "*_MACS.bed"
 
     input:
+<<<<<<< HEAD
     set val(num), val(name), file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genomeSize), file(outputDir) from macsInputChannel
+=======
+    set val(num), val(name), file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genomeSize), file(outputDir) from inputChannel
+>>>>>>> 1ce88edf3ba0bf5ec94ba6e7c9ed0466da30b5f0
 
     output:
     file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
