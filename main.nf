@@ -132,7 +132,7 @@ if (!params.bowtieIndex) {
     bwt_base = igenomes_bowtie.substring(lastPath+1)
 
     bowtieIndex = Channel
-                      .fromPath(bwt2_dir , checkIfExists: true)
+                      .fromPath(bwt_dir , checkIfExists: true)
                       .ifEmpty { exit 1, "Genome index: Provided index not found: ${igenomes_bowtie}" }
     bowtieIndexFile = igenomes_bowtie
     makeBowtieIndex = false
