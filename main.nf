@@ -273,7 +273,7 @@ process trimReads {
     shell:
     lastPath = fastqFile.toString().lastIndexOf(File.separator)
     readBase = fastqFile.toString().substring(lastPath+1)
-    name = fastqFile.toString() - ~/(\.fq)?(.fq.gz)?(\.fastq)?(\.fastq.gz)?$/
+    name = fastqFile.toString() - ~/(\.fq)?(\.fq\.gz)?(\.fastq)?(\.fastq\.gz)?$/
     '''
     trim_galore --quality 20 \
                 --fastqc \
