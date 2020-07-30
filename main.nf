@@ -33,7 +33,7 @@ def helpMessage() {
   Reproducible calling of initiation sites from nascent strand sequencing data
 
   Usage:
-  nextflow run pavirlab/inisite-nf --treatment treatment.bam --genome mm [OPTIONS]
+  nextflow run pavirlab/inisite-nf --treatment treatment.bam --genome mm9 [OPTIONS]
 
   Options:
     --treatment       fastq file containing aligned nacsent strand reads
