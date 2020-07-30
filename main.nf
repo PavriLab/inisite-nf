@@ -339,7 +339,7 @@ process alignReads {
 macsParamChannel = Channel
                       .fromList([[params.extensionSize,
                                   params.qValueCutoff,
-                                  genomeSize,
+                                  effectiveGenomeSize,
                                   params.outputDir]])
 
 macsInputChannel = alignOutputChannel
@@ -357,7 +357,7 @@ if (params.control) {
                 pattern: "*_MACS.bed"
 
     input:
-    set val(num), val(name), file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genome), file(outputDir) from inputChannel
+    set val(num), val(name), file(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genomeSize), file(outputDir) from inputChannel
 
     output:
     file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
@@ -365,7 +365,7 @@ if (params.control) {
 
     shell:
     '''
-    macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genome} -n !{treatment.getSimpleName()} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
+    macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genomeSize} -n !{treatment.getSimpleName()} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
 
     grep -v "^#" !{treatment.getSimpleName()}_peaks.xls | grep -v "fold_enrichment" | grep -v "^$" | \\
    	awk \'BEGIN{FS="\\t"; OFS="\\t"} {print $1, $2, $3, $10, $9, "+"}\' > !{treatment.getSimpleName()}_MACS.bed
