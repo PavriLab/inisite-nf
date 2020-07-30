@@ -100,7 +100,7 @@ if (!params.bowtieIndex) {
   } else if (params.fasta && !igenomes_fasta) {
     Channel
         .fromPath(params.fasta, checkIfExists: true)
-        .ifEmpty { exit 1, "Fasta needed for BowtieIndex but not found at ${params.fasta}"}
+        .ifEmpty { exit 1, "Fasta needed for BowtieIndex but not found at ${params.fasta}" }
     fastaFile = params.fasta
 
   } else {
