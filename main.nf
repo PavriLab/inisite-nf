@@ -280,7 +280,7 @@ process trimReads {
                 --length 18 \
                 --illumina \
                 --dont_gzip \
-                --basename !{name}_trimmed \
+                --basename !{name} \
                 --cores !{task.cpus} \
                 !{fastqFile} \
 
