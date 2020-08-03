@@ -319,7 +319,7 @@ process alignReads {
            -m 1 \
            --phred33-quals \
            --chunkmbs 256 \
-           !{bowtieIndex}/!{bwt_base} \
+           !{index}/!{bwt_base} \
            !{trimmed} \
            !{name}.sam
 
