@@ -328,10 +328,10 @@ process alignReads {
                   -o !{name}.bam \
                   !{name}.sam
 
-    samtools index ${name}.bam
-    samtools flagstat ${name}.bam > ${name}.bam.flagstat
-    samtools idxstats ${name}.bam > ${name}.bam.idxstats
-    samtools stats ${name}.bam > ${name}.bam.stats
+    samtools index !{name}.bam
+    samtools flagstat !{name}.bam > !{name}.bam.flagstat
+    samtools idxstats !{name}.bam > !{name}.bam.idxstats
+    samtools stats !{name}.bam > !{name}.bam.stats
     '''
 
 }
