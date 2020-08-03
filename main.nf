@@ -179,9 +179,10 @@ if (params.treatment2) {
     exit 1, "--treatment2 was specified but ${params.treatment2} does not exist!"
   }
 
-  params.control2 = params.control
-  if (params.control2) {
-    if (!file(params.control2).exists()) {
+  if (params.control && !params.control2) {
+    exit 1, "both or none controls have to be given. You can use the same control for both arguments but be sure they have distinctive names!"
+  
+  } else if (!file(params.control2).exists()) {
       exit 1, "--control2 was specified but ${params.control2} does not exist!"
     }
   }
