@@ -267,8 +267,8 @@ process trimReads {
 
     output:
     set val(num), val(name), file("${name}_trimmed.fq") into alignChannel
-    file("${name}/*_fastqc.{zip,html}") into fastqcResults
-    file("${name}/*trimming_report.txt") into trimgaloreResults
+    file("*_fastqc.{zip,html}") into fastqcResults
+    file("*trimming_report.txt") into trimgaloreResults
 
     shell:
     lastPath = fastqFile.toString().lastIndexOf(File.separator)
