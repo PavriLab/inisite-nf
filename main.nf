@@ -303,7 +303,7 @@ process alignReads {
     file(index) from bowtieIndex.collect()
 
     output:
-    set val(num), val(name), file(bam) into alignOutputChannel
+    set val(num), val(name), file("${name}.bam") into alignOutputChannel
     file "*.{flagstat,idxstats,stats}" into bowtieMultiqcChannel
 
     shell:
