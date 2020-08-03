@@ -63,7 +63,7 @@ def helpMessage() {
      cbe              CBE cluster execution with singularity
 
   Docker:
-  zuberlab/inisite-nf:latest
+  pavrilab/inisite-nf:latest
 
   Authors:
   Tobias Neumann (tobias.neumann@imp.ac.at)
