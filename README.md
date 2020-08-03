@@ -44,7 +44,7 @@ nextflow run pavrilab/iniseq-nf --treatment ns_seq1.fastq [--control control1.fa
 
 **b. Dual**
 ```bash
-nextflow run pavrilab/iniseq-nf --treatment ns_seq1.fastq --treatment2 ns_seq2.fastq [--control control1.fastq] [--control2 control2.fastq] --genome mm9
+nextflow run pavrilab/iniseq-nf --treatment ns_seq1.fastq --treatment2 ns_seq2.fastq [--control control1.fastq --control2 control2.fastq] --genome mm9
 ```
 
 Note that we only support human, mouse, Drosophila and C. elegans by default (see `conf/igenomes.conf`). If you want to use a different genome either specify `--fasta`/`--bowtieIndex` and `--genomeSize` or add the respective genome to the igenomes.conf file.
@@ -97,7 +97,7 @@ Optional second set of aligned NS-seq reads in any format permitted by MACS
 Aligned reads of background signal (e.g. sheared genomic DNA). If not given MACS calls peak without input.
 
 #### `--control2`
-Optional aligned control data set for `--treatment2`. If not given `--control` is used for `--treatment2` as well. If both control arguments are not given MACS calls peaks without input for both.
+aligned control data set for `--treatment2`. If `--control` was specified this also must be specified. If both control arguments are not given MACS calls peaks without input for both.
 
 ## Generic arguments
 #### `--genome`
