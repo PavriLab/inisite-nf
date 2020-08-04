@@ -342,13 +342,10 @@ macsParamChannel = Channel
                                   effectiveGenomeSize,
                                   params.outputDir]])
 
-alignOutputChannel
+macsInputChannel = alignOutputChannel
                       .groupTuple()
                       .combine(macsParamChannel)
 		      .map { it -> it.flatten() }
-		      .into { macsInputChannel; introspectChannel }
-		      
-introspectChannel.println()
 
 if (params.control) {
   process callPeaksWithControl {
