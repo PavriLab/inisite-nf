@@ -351,7 +351,7 @@ introspectChannel.println()
 if (params.control) {
   process callPeaksWithControl {
 
-    tag { treatname }
+    tag { treatment.getSimpleName() }
 
     publishDir  path: "${params.outputDir}/peaks",
                 mode: "copy",
