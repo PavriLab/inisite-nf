@@ -346,6 +346,7 @@ macsInputChannel = alignOutputChannel
                       .groupTuple()
                       .combine(macsParamChannel)
 		      .map { it -> it.flatten() }
+		      .println()
 
 if (params.control) {
   process callPeaksWithControl {
