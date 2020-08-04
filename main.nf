@@ -243,17 +243,17 @@ if (makeBowtieIndex) {
 }
 
 if (!params.treatment2 && !params.control) {
-  files2Align = [[1, val("t"), file(params.treatment)]]
+  files2Align = [[1, "t", file(params.treatment)]]
 
 } else if (!params.treatment2 && params.control) {
-  files2Align = [[1, val("t"), file(params.treatment)], [1, val("c"), file(params.control)]]
+  files2Align = [[1, "t", file(params.treatment)], [1, "c", file(params.control)]]
 
 } else if (params.treatment2 && !params.control) {
-  files2Align = [[1, val("t"), file(params.treatment)], [2, val("t"), file(params.treatment2)]]
+  files2Align = [[1, "t", file(params.treatment)], [2, "t", file(params.treatment2)]]
 
 } else {
-  files2Align = [[1, val("t"), file(params.treatment)], [1, val("c"), file(params.control)],
-                 [2, val("t"), file(params.treatment2)], [2, val("c"), file(params.control2)]]
+  files2Align = [[1, "t", file(params.treatment)], [1, "c", file(params.control)],
+                 [2, "t", file(params.treatment2)], [2, "c", file(params.control2)]]
 }
 
 preprocessChannel = Channel
