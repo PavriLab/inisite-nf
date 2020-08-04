@@ -243,10 +243,10 @@ if (makeBowtieIndex) {
 }
 
 if (!params.treatment2 && !params.control) {
-  files2Align = [[1, file(params.treatment)]]
+  files2Align = [[1, val("t"), file(params.treatment)]]
 
 } else if (!params.treatment2 && params.control) {
-  files2Align = [[1, file(params.treatment)], [1, file(params.control)]]
+  files2Align = [[1, val("t"), file(params.treatment)], [1, val("c"), file(params.control)]]
 
 } else if (params.treatment2 && !params.control) {
   files2Align = [[1, val("t"), file(params.treatment)], [2, val("t"), file(params.treatment2)]]
@@ -343,7 +343,7 @@ macsParamChannel = Channel
                                   params.outputDir]])
 
 alignOutputChannel
-                      .groupTuple()
+ 		      .groupTuple()
                       .combine(macsParamChannel)
 		      .into { macsInputChannel; introspectChannel }
 introspectChannel.println()
