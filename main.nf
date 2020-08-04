@@ -345,9 +345,9 @@ macsParamChannel = Channel
 alignOutputChannel
                       .groupTuple()
                       .combine(macsParamChannel)
-		      .into { macsInputChannel, introspectChannel }
+		      .into { macsInputChannel; introspectChannel }
 		      
-introspectChannel.println
+introspectChannel.println()
 
 if (params.control) {
   process callPeaksWithControl {
