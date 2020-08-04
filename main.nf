@@ -345,7 +345,6 @@ macsParamChannel = Channel
 alignOutputChannel
                       .groupTuple()
                       .combine(macsParamChannel)
-		      .map { it -> it.flatten() }
 		      .into { macsInputChannel; introspectChannel }
 introspectChannel.println()
 
@@ -360,7 +359,7 @@ if (params.control) {
                 pattern: "*_MACS.bed"
 
     input:
-    set val(num), val(treatname), file(treatment), val(controlname), file(control), val(extensionSize), val(qValueCutoff), val(genomeSize), file(outputDir) from macsInputChannel
+    set val(num), val(treatname), file(controlname), val(treatment), file(control), val(extensionSize), val(qValueCutoff), val(genomeSize), file(outputDir) from macsInputChannel
 
     output:
     file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
