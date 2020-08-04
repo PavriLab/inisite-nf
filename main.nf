@@ -249,11 +249,11 @@ if (!params.treatment2 && !params.control) {
   files2Align = [[1, file(params.treatment)], [1, file(params.control)]]
 
 } else if (params.treatment2 && !params.control) {
-  files2Align = [[1, file(params.treatment)], [2, file(params.treatment2)]]
+  files2Align = [[1, val("t"), file(params.treatment)], [2, val("t"), file(params.treatment2)]]
 
 } else {
-  files2Align = [[1, file(params.treatment)], [1, file(params.control)],
-                 [2, file(params.treatment2)], [2, file(params.control2)]]
+  files2Align = [[1, val("t"), file(params.treatment)], [1, val("c"), file(params.control)],
+                 [2, val("t"), file(params.treatment2)], [2, val("c"), file(params.control2)]]
 }
 
 preprocessChannel = Channel
@@ -263,10 +263,10 @@ process trimReads {
     tag { name }
 
     input:
-    set val(num), file(fastqFile) from preprocessChannel
+    set val(num), val(typ), file(fastqFile) from preprocessChannel
 
     output:
-    set val(num), val(name), file("${name}_trimmed.fq") into alignChannel
+    set val(num), val(typ), val(name), file("${name}_trimmed.fq") into alignChannel
     file("*_fastqc.{zip,html}") into fastqcResults
     file("*trimming_report.txt") into trimgaloreResults
 
@@ -299,11 +299,11 @@ process alignReads {
                 pattern: "*.bam"
 
     input:
-    set val(num), val(name), file(trimmed) from alignChannel
+    set val(num), val(typ), val(name), file(trimmed) from alignChannel
     file(index) from bowtieIndex.collect()
 
     output:
-    set val(num), val(name), file("${name}.bam") into alignOutputChannel
+    set val(num), val(typ), val(name), file("${name}.bam") into alignOutputChannel
     file "*.{flagstat,idxstats,stats}" into bowtieMultiqcChannel
 
     shell:
