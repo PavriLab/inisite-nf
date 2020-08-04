@@ -345,6 +345,7 @@ macsParamChannel = Channel
 alignOutputChannel
                       .groupTuple()
                       .combine(macsParamChannel)
+		      .flatten()
 		      .into { macsInputChannel; introspectChannel }
 		      
 introspectChannel.println()
