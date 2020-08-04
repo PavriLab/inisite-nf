@@ -346,7 +346,7 @@ macsParamChannel = Channel
 macsInputChannel = alignOutputChannel
                       .groupTuple()
                       .combine(macsParamChannel)
-		      .println
+		      .subscribe onNext: { println it }, onComplete: { println 'Done' }
 
 if (params.control) {
   process callPeaksWithControl {
