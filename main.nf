@@ -184,7 +184,6 @@ if (params.treatment2) {
   
   } else if (!file(params.control2).exists()) {
       exit 1, "--control2 was specified but ${params.control2} does not exist!"
-    }
   }
 
   log.info ""
