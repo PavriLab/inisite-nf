@@ -28,14 +28,12 @@ The basic principle of the mapping workflow is abstracted from [Cayrou et al, Ge
 ## Quick Start
 i. Install [`nextflow`](https://nf-co.re/usage/installation)
 
-ii. Install [`MACS2`](https://github.com/taoliu/MACS), [`BEDTools`](https://bedtools.readthedocs.io/en/latest/), [`ClusterScan`](https://github.com/pyrevo/ClusterScan) and the [`pandas`](https://pandas.pydata.org/docs/index.html) Python package
-
-iii. Clone repository with 
+ii. Clone repository with 
 ```bash
 nextflow pull dmalzl/inisite-nf
 ```
 
-iv. Start running your own analysis!
+iii. Start running your own analysis!
 
 **a. Single**
 ```bash
