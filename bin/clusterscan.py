@@ -190,7 +190,7 @@ def main():
     bedTbl = table.copy()
     print(bedTbl)
     bedTbl["strand"] = "+"
-    bedTbl = bedTbl[[0, 1, 2, 5, 3, 6, 4]]
+    bedTbl = bedTbl.iloc[:, [0, 1, 2, 5, 3, 6, 4]]
     bed = pybedtools.BedTool().from_dataframe(bedTbl).sort()
 
     # generate table of features by intersect feature with clusters
@@ -199,7 +199,7 @@ def main():
     features = all_features_bed.intersect(clusters, wb=True)
     features = pd.read_table(features.fn, header=None, dtype={0: str, 7: str})
     cl_features = features[features[6] == features[11]]
-    cl_features = cl_features[[0, 1, 2, 3, 4, 5, 12, 11]]
+    cl_features = cl_features.iloc[:, [0, 1, 2, 3, 4, 5, 12, 11]]
     cl_features.columns = ["chr", "start", "end", "name", "score",
                            "strand", "cluster_id", "category"]
     cl_features.drop('score', axis=1, inplace=True)
@@ -214,10 +214,10 @@ def main():
 
     # control for bystander = 0 (when program run with 1 category)
     if bystanders.empty:
-        table = table[[5, 4, 0, 1, 2, 3]]
+        table = table.iloc[:, [5, 4, 0, 1, 2, 3]]
         table["n_bystanders"] = 0
     else:
-        bystanders = bystanders[[0, 1, 2, 3, 4, 5, 12, 11]]
+        bystanders = bystanders.iloc[:, [0, 1, 2, 3, 4, 5, 12, 11]]
         bystanders.columns = ["chr", "start", "end", "name", "score",
                               "strand", "cluster_id", "category"]
         # prevent bystanders with 2+ different categories to be counted twice
@@ -229,10 +229,10 @@ def main():
         bystanders = bystanders.drop(bystanders.columns[[4, 8]], axis=1)
         # count bystanders number
         bs_count = bystanders.groupby("cluster_id").count().reset_index()
-        bs_count = bs_count[[0, 1]]
+        bs_count = bs_count.iloc[:, [0, 1]]
         bs_count.columns = ["cluster_id", "n_bystanders"]
         table = table.merge(bs_count, on="cluster_id", how='outer')
-        table = table[[5, 4, 0, 1, 2, 3, 6]]
+        table = table.iloc[:, [5, 4, 0, 1, 2, 3, 6]]
         table["n_bystanders"].fillna(0, inplace=True)
         table["n_bystanders"] = table["n_bystanders"].astype(int)
         bystanders["start"] += 1
