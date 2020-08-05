@@ -188,7 +188,6 @@ def main():
 
     # generate output of clusters in BED format
     bedTbl = table.copy()
-    print(bedTbl)
     bedTbl["strand"] = "+"
     bedTbl = bedTbl.iloc[:, [0, 1, 2, 5, 3, 6, 4]]
     bed = pybedtools.BedTool().from_dataframe(bedTbl).sort()
