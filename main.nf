@@ -359,15 +359,20 @@ if (params.control) {
                 pattern: "*_MACS.bed"
 
     input:
-    set val(num), val(names), val(bams), val(extensionSize), val(qValueCutoff), val(genomeSize), val(outputDir) from macsInputChannel
+    set val(num), val(types), val(names), val(bams), val(extensionSize), val(qValueCutoff), val(genomeSize), val(outputDir) from macsInputChannel
 
     output:
     file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
     file("${treatment.getSimpleName()}_MACS.bed") into calledPeaks
 
     shell:
-    treatment = bams[0]
-    control = bams[1]
+    if (types[0] == "t") {
+    	treatment = bams[0]
+    	control = bams[1]
+    } else {
+    	treatment = bams[1]
+	control = bams[0]
+    }
 
     '''
     macs2 callpeak -t !{treatment} -c !{control} -f AUTO -g !{genomeSize} -n !{treatment.getSimpleName()} --nomodel --extsize !{extensionSize} -q !{qValueCutoff}
@@ -389,7 +394,7 @@ if (params.control) {
                 pattern: "*_MACS.bed"
 
     input:
-    set val(num), val(name), file(treatment), val(extensionSize), val(qValueCutoff), val(genome), file(outputDir) from macsInputChannel
+    set val(num), val(typ), val(name), file(treatment), val(extensionSize), val(qValueCutoff), val(genome), file(outputDir) from macsInputChannel
 
     output:
     file("${treatment.getSimpleName()}_peaks.narrowPeak") into resultsCallPeaks
