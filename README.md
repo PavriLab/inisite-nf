@@ -30,7 +30,7 @@ i. Install [`nextflow`](https://nf-co.re/usage/installation)
 
 ii. Clone repository with 
 ```bash
-nextflow pull dmalzl/inisite-nf
+nextflow pull pavrilab/inisite-nf
 ```
 
 iii. Start running your own analysis!
