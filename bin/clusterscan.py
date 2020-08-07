@@ -299,7 +299,7 @@ def main():
         bed.saveas(bed_name, trackline='track name="%s" description="chr start end cluster_id n_features strand category"' % (arguments['--analysis']))
 
     # plot a duistribution for top 10 clusters (per n of features)
-    rpy2_plotter(summary, table, plot_name)
+    #rpy2_plotter(summary, table, plot_name)
 
     if arguments['--singletons'] is True:
         print("Singletons identification has been launched...")
