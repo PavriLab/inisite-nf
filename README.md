@@ -1,6 +1,7 @@
 # inisite-nf
 
-[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A519.10.0-brightgreen.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A519.10.0-brightgreen.svg)](https://www.nextflow.io/) [![DOI](https://zenodo.org/badge/249460546.svg)](https://zenodo.org/badge/latestdoi/249460546)
+
 
 ## Introduction
 **inisite-nf** is a bioinformatics analysis pipeline used for mapping initiation sites from nascent strand sequencing data (NS-seq).
