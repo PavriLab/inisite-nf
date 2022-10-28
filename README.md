@@ -87,16 +87,16 @@ params {
 ```
 
 #### `--treatment`
-Aligned NS-seq reads in any format permitted by MACS
+Raw NS-seq reads in FASTQ format
 
 #### `--treatment2`
-Optional second set of aligned NS-seq reads in any format permitted by MACS
+Optional second set of raw NS-seq reads in FASTQ format
 
 #### `--control`
-Aligned reads of background signal (e.g. sheared genomic DNA). If not given MACS calls peak without input.
+raw reads of background signal (e.g. sheared genomic DNA). If not given MACS calls peak without input.
 
 #### `--control2`
-aligned control data set for `--treatment2`. If `--control` was specified this also must be specified. If both control arguments are not given MACS calls peaks without input for both.
+raw control reads for `--treatment2`. If `--control` was specified this also must be specified. If both control arguments are not given MACS calls peaks without input for both.
 
 ## Generic arguments
 #### `--genome`
