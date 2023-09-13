@@ -1,4 +1,4 @@
-process BEDTOOLS_FILTER_INITIATION_SITES {
+process BEDTOOLS_FILTER_IS {
     tag "meta.id"
 
     input:
