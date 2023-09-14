@@ -20,25 +20,16 @@ workflow PREPARE_GENOME {
         ch_fasta = file( dynamic_params.genomeFasta )
     }
 
-    if ("bowtie2" in prepare_genome_for_tools) {
-        ch_bowtie2_index = BOWTIE2_BUILD_INDEX (
+    if ("bowtie" in prepare_genome_for_tools) {
+        ch_bowtie2_index = BOWTIE_BUILD_INDEX (
             ch_fasta,
             dynamic_params.genomeSizeType
         )
 
     } else {
-        def bwt2_base = file( dynamic_params.bowtie2Index ).getSimpleName()
-        def bwt2_dir = file( dynamic_params.bowtie2Index ).getParent()
-        ch_bowtie2_index = [ bwt2_base, bwt2_dir ]
-    }
-
-    ch_genome_digest = Channel.empty()
-    if ("hicup" in prepare_genome_for_tools) {
-        ch_genome_digest = DIGEST_GENOME (
-            ch_fasta,
-            dynamic_params.genomeName,
-            dynamic_params.re
-        )
+        def bwt_base = file( dynamic_params.bowtieIndex ).getSimpleName()
+        def bwt_dir = file( dynamic_params.bowtieIndex ).getParent()
+        ch_bowtie_index = [ bwt_base, bwt_dir ]
     }
 
     if ("chromSizes" in prepare_genome_for_tools) {
@@ -51,8 +42,7 @@ workflow PREPARE_GENOME {
     }
 
     emit:
-    index      = ch_bowtie2_index
-    digest     = ch_genome_digest
+    index      = ch_bowtie_index
     sizes      = ch_genome_sizes
 
 }

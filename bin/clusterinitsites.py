@@ -34,10 +34,9 @@ with open(annotationFile, 'w') as csa:
 # calculating pairwise distances between MACS peaks
 logging.info('computing median distance')
 distances = []
-for group in bed.groupby('chr'):
-    frame = group[1]
-    for i in frame.index[:-1]:
-        distances.append(frame.at[i + 1, 'start'] - frame.at[i, 'end'])
+for _, group in bed.groupby('chr'):
+    for i in group.index[:-1]:
+        distances.append(group.at[i + 1, 'start'] - group.at[i, 'end'])
 
 median = int(pd.Series(distances).median())
 logging.info('median distance between peaks is %d' % median)

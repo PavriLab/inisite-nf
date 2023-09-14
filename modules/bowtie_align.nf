@@ -6,8 +6,8 @@ process BOWTIE_ALIGN {
     path(index)
 
     output:
-    tuple val(meta), path("${meta.id}.bam"),                emit: alignments
-    tuple val(meta), path("*.{flagstat,idxstats,stats}"),   emit: stats
+    tuple val(meta), path("${meta.id}.bam"), path("${meta.id}.bam.bai"),    emit: alignments
+    tuple val(meta), path("*.{flagstat,idxstats,stats}"),                   emit: stats
 
     shell:
     '''

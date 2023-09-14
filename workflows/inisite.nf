@@ -3,15 +3,15 @@
     VALIDATE INPUTS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-WorkflowHicer.initialise(params, log)
+WorkflowInisite.initialise(params, log)
 
 if (params.genome && params.genomes && !params.igenomes_ignore) {
-    igenomes_bowtie2    = WorkflowHicer.getGenomeAttribute(params, 'bowtie2')
-    igenomes_fasta      = WorkflowHicer.getGenomeAttribute(params, 'fasta')
-    igenomes_chromSizes = WorkflowHicer.getGenomeAttribute(params, 'chromSizes')
+    igenomes_bowtie     = WorkflowInisite.getGenomeAttribute(params, 'bowtie')
+    igenomes_fasta      = WorkflowInisite.getGenomeAttribute(params, 'fasta')
+    igenomes_chromSizes = WorkflowInisite.getGenomeAttribute(params, 'chromSizes')
 
 } else {
-    igenomes_bowtie2 = ''
+    igenomes_bowtie = ''
     igenomes_fasta = ''
     igenomes_chromSizes = ''
 }
@@ -27,26 +27,14 @@ checkPathParamList = [
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
-if (params.resolutions) {
-    resolutions = WorkflowHicer.makeResolutionsUnique(
-        params.defaultResolutions + ',' + params.resolutions
-    )
-
-} else {
-    resolutions = params.defaultResolutions
-}
-
-resolutionsList = WorkflowHicer.makeResolutionList( resolutions )
-baseResolution = resolutionsList[0]
-
 // setting up for prepare genome subworkflow
 def prepare_genome_for_tools = []
 
 // if we do not have --genome
 if (!params.genome) {
-    // bowtie2 index
+    // bowtie index
     if (params.fasta) {
-        prepare_genome_for_tools << "bowtie2"
+        prepare_genome_for_tools << "bowtie"
 
     } else {
         log.error "Neither --genome nor --fasta are specified but needed for bowtie2 index."
@@ -54,17 +42,7 @@ if (!params.genome) {
     }
 
     // HICUP genome digest
-    if (params.fasta && params.chromSizes) {
-        if (params.re) {
-            prepare_genome_for_tools << "hicup"
-
-        // if digest pattern is not specified we assume Micro-C run
-        } else {
-            log.warn "--re not specified. Assuming you are analysing Micro-C data"
-        }
-
-    // if genome info is incomplete we exit
-    } else {
+    if (!(params.fasta && params.chromSizes)) {
         log.error "--fasta or --chromSizes not given and --genome not specified"
         System.exit(1)
     }
@@ -74,29 +52,22 @@ if (!params.genome) {
     }
 // if --genome is specified we check if everything is there
 } else {
-    if (!igenomes_bowtie2) {
-        log.info "Bowtie2 index not found in igenomes config file. Computing from igenomes_fasta"
-        prepare_genome_for_tools << "bowtie2"
+    if (!igenomes_bowtie) {
+        log.info "Bowtie index not found in igenomes config file. Computing from igenomes_fasta"
+        prepare_genome_for_tools << "bowtie"
     }
 
     if (igenomes_chromSizes.endsWith("xml")) {
         prepare_genome_for_tools << "chromSizes"
-    }
-
-    if (params.re) {
-        prepare_genome_for_tools << "hicup"
     }
 }
 
 dynamic_params = [:]
 dynamic_params.genomeFasta      = params.genome ? igenomes_fasta : params.fasta
 dynamic_params.genomeSizes      = params.genome ? igenomes_chromSizes : params.chromSizes
-dynamic_params.bowtie2Index     = igenomes_bowtie2 ? igenomes_bowtie2 : "computed from fasta"
-dynamic_params.genomeSizeType   = WorkflowInisite.getGenomeSizeType( dynamic_params.genomeSizes )
+dynamic_params.bowtieIndex      = igenomes_bowtie ? igenomes_bowtie : "computed from fasta"
+// dynamic_params.genomeSizeType   = WorkflowInisite.getGenomeSizeType( dynamic_params.genomeSizes )
 dynamic_params.genomeName       = params.genome ? params.genome : file(dynamic_params.genomeFasta).getSimpleName()
-dynamic_params.baseResolution   = baseResolution
-dynamic_params.resolutions      = resolutions
-dynamic_params.re               = params.re
 
 WorkflowInisite.paramsSummaryLog( params, dynamic_params, log )
 
@@ -150,77 +121,40 @@ workflow INISITE {
     } else {
         ch_genome = [:]
         ch_genome.index     = file( dynamic_params.bowtie2Index ).getParent()
-        ch_genome.digest    = ''
         ch_genome.sizes     = file( dynamic_params.genomeSizes )
     }
-
-    // concatenate fastqs of samples with multiple readfiles
-    CAT_FASTQ ( ch_fastq.multiple )
-        .reads
-        .mix ( ch_fastq.single )
-        .set { ch_cat_fastq }
 
     // read QC
     TRIM_GALORE ( ch_cat_fastq )
         .reads
         .set { ch_trim_fastq }
 
-    // splitting fastqs for HICUP parallelization
-    // flatten().collate() relies on the fact that each file is interspersed
-    // by a meta object after the first map invocation
-    SPLIT_FASTQ ( ch_trim_fastq )
-        .reads
-        .map { WorkflowHicer.distributeMetaSingle( it ) }
-        .flatten ()
-        .collate ( 2 )
-        .map {
-            meta, file ->
-                def meta_clone = meta.clone()
-                meta_clone.id = file.name.toString() - ~/(_[12]\.fq)?$/
-                [ meta_clone, file ]
-        }
-        .groupTuple (by: [0])
-        .set { ch_split_fastq }
-
-    if (params.re) {
-        ch_hicup = HIC (
-            ch_split_fastq,
-            ch_genome.index,
-            ch_genome.digest,
-            dynamic_params.genomeSizeType
-        )
-
-    } else {
-        ch_hicup = MICROC (
-            ch_split_fastq,
-            ch_genome.index,
-            dynamic_params.genomeSizeType
-        )
-    }
-
-    SAM_TO_BAM ( ch_hicup.alignments )
-
-    MAKE_PAIRS_FILE (
-        ch_hicup.alignments,
-        ch_genome.sizes
+    BOWTIE_ALIGN (
+        ch_trim_fastq,
+        ch_genome.bowtieIndex
     )
 
-    COOLER_MAKE_MATRIX (
-        MAKE_PAIRS_FILE.out.pairs,
-        dynamic_params.genomeName,
-        dynamic_params.baseResolution,
-        dynamic_params.resolutions,
-        ch_genome.sizes
+    DEEPTOOLS_GENERATE_BIGWIG (
+        BOWTIE_ALIGN.alignments,
+        params.binSize
+    )
+    // have to find a way to use or not use control here
+    // maybe have a look at the nf-core chipseq pipeline
+    MACS2_CALL_PEAKS (
+        BOWTIE_ALIGN.alignments,
+        control, // this parameter is not yet fixed
+        params.extensionSize,
+        params.qValueCutoff
     )
 
-    if (!params.skip_juicer) {
-        JUICER_MAKE_MATRIX (
-            MAKE_PAIRS_FILE.out.pairs,
-            ch_genome.sizes,
-            dynamic_params.resolutions
-        )
-    }
+    BEDTOOLS_INTERSECT_REPLICATES ( ch_grouped_replicates )
 
+    CLUSTERSCAN_CLUSTER_IS ()
+
+    BEDTOOLS_FILTER_IS ()
+
+    OVERLAP_SAMPLES ()
+    
     MULTIQC (
         TRIM_GALORE.out.fastqc.collect(),
         TRIM_GALORE.out.reports.collect(),
