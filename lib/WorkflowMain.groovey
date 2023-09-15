@@ -5,56 +5,48 @@ class WorkflowMain {
     public static void help(log) {
         log.info"""
         ================================================================
-         hicer-nf
+         inisite-nf
         ================================================================
-         DESCRIPTION
+        DESCRIPTION
 
-         Basic processing of HiC data.
+        Reproducible calling of initiation sites from nascent strand sequencing data
 
-         Usage:
-         nextflow run pavrilab/hicer-nf
+        Usage:
+        nextflow run pavirlab/inisite-nf --treatment treatment.bam --genome mm9 [OPTIONS]
 
-         Options:
-            --samples        Tab-delimited text file specifying the samples
-                             to be processed. (default: 'samples.txt')
-                             The following columns are required:
-                                - name: name of sample
-                                - read1: Read file with first read mates (R1) in fastq(.gz) format
-                                - read2: Read file with second read mates (R2) in fastq(.gz) format
+        Options:
+          --samples         Tab-delimited text file specifying the samples
+                            to be processed. (default: 'samples.txt')
+                            The following columns are required:
+                                - sample:       name of sample
+                                - group:        replicate group
+                                - replicate:    replicate number
+                                - fastq:        Read file with second read mates (R2) in fastq(.gz) format
+                                - control:      control sample used to call peaks (typically gDNA digest)
 
-            --resolutions    comma-separated list of resolutions in bp to compute in addition to the default resolutions
-    			                   default resolutions are 5000,10000,25000,50000,100000,250000,500000,1000000 and resolutions
-    			                   specified via this parameter will be added to this list
 
-            --re             regular expression to use for in-silico digestion by HICUP (e.g. ^GATC,MboI)
-                             if not given the pipeline assumes the micro-C protocol was used and skips the truncation step
-                             and filters the reads only by their minimum mapping distance
+          --extensionSize   size to which the reads should be extended (Default: 275bp)
+          --qValueCutoff    MACS2  q-value cutoff (Default: 0.05)
 
-            --outputDir      Directory name to save results to. (default: 'results')
+          --outputDir       name of the directory to save results to (Default: results)
 
-            --readsPerSplit  specifies the number of read per fastq split for parallel processing (default: 25.000.000)
+          References:
+           --genome         Name of reference (hg38, mm10, ...)
+           --fasta          Alternatively, path to genome fasta file which will be digested
+           --genomeSize     effective genome size to use with MACS
+           --bowtieIndex    Optional: Path to bowtie index
 
-            --minMapDistance minimum mapping distance between to reads of a pair (default: 500)
-                             is only used in case of micro-C (i.e. --re is not given)
+        Profiles:
+           standard         local execution
+           singularity      local execution with singularity
+           cbe              CBE cluster execution with singularity
 
-            --skip_juicer    if set, skips hic file generation with juicer
+        Docker:
+        pavrilab/inisite-nf:latest
 
-         References:
-            --genome         Name of reference (hg38, mm10, ...)
-            --fasta          Alternatively, path to genome fasta file which will be digested
-            --chromSizes     tab-separated file containing chromosome names and their sizes
-
-         Profiles:
-            standard         local execution
-            singularity      local execution with singularity
-            cbe              CBE cluster execution with singularity
-
-         Docker:
-         zuberlab/hicer-nf:latest
-
-         Authors:
-         Tobias Neumann (tobias.neumann@imp.ac.at)
-         Daniel Malzl (daniel.malzl@imp.ac.at)
+        Authors:
+        Tobias Neumann (tobias.neumann@imp.ac.at)
+        Daniel Malzl (daniel.malzl@imp.ac.at)
         """.stripIndent()
     }
 
