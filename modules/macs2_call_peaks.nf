@@ -2,24 +2,24 @@ process MACS2_CALL_PEAKS {
     tag "meta.id"
 
     input:
-    tuple val(meta), path(treatment)
-    path(control)
+    tuple val(meta), path(treatment), path(control)
     val(extensionSize)
     val(qValueCutoff)
+    val(macsGenomeSize)
 
     output:
     tuple val(meta), path("${meta.id}_MACS.bed"),           emit: bed
     tuple val(meta), path("${meta.id}_peaks.narrowPeak"),   emit: narrowpeaks
 
     script:
-    ext_args = control ? "-c ${control}" : ""
+    def control = control ? "-c ${control}" : ""
 
     """
     macs2 callpeak \
-        !{ext_args} \
+        !{control} \
         -t !{treatment} \
         -f AUTO \
-        -g !{meta.genomesize} \
+        -g !{macsGenomeSize} \
         -n !{meta.id} \
         --nomodel \
         --extsize !{extensionSize} \

@@ -17,6 +17,8 @@ workflow INPUT_CHECK {
 def create_fastq_channel(LinkedHashMap row) {
     def meta = [:]
     meta.id = row.sample
+    meta.group = row.group
+    meta.replicate = row.replicate
 
     if(!file(row.fastq).exists()) {
         exit 1, "ERROR: Please check input samplesheet -> FastQ file does not exist!\n${row.fastq}"

@@ -138,23 +138,51 @@ workflow INISITE {
         BOWTIE_ALIGN.alignments,
         params.binSize
     )
-    // have to find a way to use or not use control here
-    // maybe have a look at the nf-core chipseq pipeline
+
+    // adapted from nf-core chipseq
+    BOWTIE_ALIGN.out.alignments
+        .combine ( BOWTIE_ALIGN.alignments )
+        .map {
+            meta1, bam1, bai1, meta2, bam2, bai2 ->
+                meta1.control == meta2.id ? [ meta1, [ bam1, bam2 ]] : null
+        }
+        .set { ch_callpeaks_input }
+
     MACS2_CALL_PEAKS (
-        BOWTIE_ALIGN.alignments,
-        control, // this parameter is not yet fixed
+        ch_callpeaks_input,
         params.extensionSize,
         params.qValueCutoff
+        macsGenomeSize
     )
 
-    BEDTOOLS_INTERSECT_REPLICATES ( ch_grouped_replicates )
+    MACS2_CALL_PEAKS.out.bed
+        .map {
+            meta, bed ->
+                [ meta.replicate, meta, bed ]
+        }
+        .groupTuple(by: [0])
+        .branch {
+            meta, beds ->
+                single      :   beds.size() == 1
+                    return [ meta, beds.flatten() ]
 
-    CLUSTERSCAN_CLUSTER_IS ()
+                replicates  :   beds.size() > 1
+                    return [ meta, beds.flatten() ]
+        }
+        .set { ch_called_peaks }
+
+    BEDTOOLS_INTERSECT_REPLICATES ( ch_called_peaks.replicates )
+
+    BEDTOOLS_INTERSECT_REPLICATES.commonPeaks
+        .mix ( ch_called_peaks.single )
+        .set { ch_cluster_is }
+
+    CLUSTERSCAN_CLUSTER_IS ( ch_cluster_is )
 
     BEDTOOLS_FILTER_IS ()
 
     OVERLAP_SAMPLES ()
-    
+
     MULTIQC (
         TRIM_GALORE.out.fastqc.collect(),
         TRIM_GALORE.out.reports.collect(),
