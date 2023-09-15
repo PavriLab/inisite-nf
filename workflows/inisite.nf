@@ -179,7 +179,10 @@ workflow INISITE {
 
     CLUSTERSCAN_CLUSTER_IS ( ch_cluster_is )
 
-    BEDTOOLS_FILTER_IS ()
+    BEDTOOLS_FILTER_IS (
+        CLUSTERSCAN_CLUSTER_IS.commonPeaks,
+        CLUSTERSCAN_CLUSTER_IS.clusters
+    )
 
     OVERLAP_SAMPLES ()
 
