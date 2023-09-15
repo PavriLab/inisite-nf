@@ -12,11 +12,11 @@ class WorkflowMain {
         Reproducible calling of initiation sites from nascent strand sequencing data
 
         Usage:
-        nextflow run pavirlab/inisite-nf --samples samples.txt --genome mm9 [OPTIONS]
+        nextflow run pavirlab/inisite-nf --input samples.csv --genome mm9 [OPTIONS]
 
         Options:
-          --samples         Tab-delimited text file specifying the samples
-                            to be processed. (default: 'samples.txt')
+          --input           comma-separated text file specifying the samples
+                            to be processed. (default: 'samples.csv')
                             The following columns are required:
                                 - sample:       name of sample
                                 - group:        replicate group
@@ -65,7 +65,7 @@ class WorkflowMain {
 
         // Check input has been provided
         if (!params.input) {
-            log.error "Please provide an input samplesheet to the pipeline e.g. '--input samplesheet.csv'"
+            log.error "Please provide an input samplesheet to the pipeline e.g. '--input samples.csv'"
             System.exit(1)
         }
     }
