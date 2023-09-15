@@ -12,7 +12,7 @@ class WorkflowMain {
         Reproducible calling of initiation sites from nascent strand sequencing data
 
         Usage:
-        nextflow run pavirlab/inisite-nf --treatment treatment.bam --genome mm9 [OPTIONS]
+        nextflow run pavirlab/inisite-nf --samples samples.txt --genome mm9 [OPTIONS]
 
         Options:
           --samples         Tab-delimited text file specifying the samples

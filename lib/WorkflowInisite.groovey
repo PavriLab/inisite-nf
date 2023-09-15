@@ -1,0 +1,30 @@
+class WorkflowInisite {
+    // public methods
+    public static void initialise(params, log) {
+        genomeExistsError(params, log)
+
+        if (!params.genome && !params.fasta) {
+            log.error "Neither genome nor fasta file are specified"
+            System.exit(1)
+        }
+    }
+
+    public static String getMacsGenomeSize(genomeName) {
+
+    }
+
+    // private methods
+    //
+    // check if specified genome exists
+    //
+    private static void genomeExistsError(params, log) {
+        if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
+            log.error "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" +
+                "  Currently, the available genome keys are:\n" +
+                "  ${params.genomes.keySet().join(", ")}\n" +
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            System.exit(1)
+        }
+    }
+}
